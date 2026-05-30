@@ -416,6 +416,7 @@ h1 {
 
 .video-card {
   display: grid;
+  grid-template-rows: auto minmax(3.15em, max-content) auto;
   align-content: start;
   gap: 0.85rem;
   min-width: 0;
@@ -425,7 +426,7 @@ h1 {
 }
 
 .video-card:nth-child(2n) {
-  border-right: 0;
+  border-right-color: transparent;
 }
 
 .video-card:nth-last-child(-n + 2) {
@@ -443,6 +444,7 @@ h1 {
 
 .video-card h3 {
   margin: 0;
+  min-height: 3.15em;
   font-size: clamp(1.05rem, 1.65vw, 1.45rem);
   font-weight: 950;
   line-height: 1.05;
@@ -450,6 +452,7 @@ h1 {
 
 .video-frame {
   width: 100%;
+  max-width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   background: var(--ink);
@@ -548,9 +551,12 @@ h1 {
 
   .catalog-labels span:nth-child(2n),
   .fact-list div:nth-child(2n),
-  .press-card:nth-child(2n),
-  .video-card:nth-child(2n) {
+  .press-card:nth-child(2n) {
     border-right: 0;
+  }
+
+  .video-card:nth-child(2n) {
+    border-right-color: transparent;
   }
 
   .catalog-labels span,
