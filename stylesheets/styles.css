@@ -488,7 +488,7 @@ h1 {
   border-right-color: transparent;
 }
 
-.sound-card:last-child {
+.sound-card:nth-last-child(-n + 2) {
   border-bottom: 0;
 }
 
@@ -659,11 +659,8 @@ h1 {
   .catalog-labels span:last-child,
   .fact-list div:nth-last-child(-n + 2),
   .press-card:nth-last-child(-n + 2),
-  .video-card:nth-last-child(-n + 2) {
-    border-bottom: 0;
-  }
-
-  .sound-card:last-child {
+  .video-card:nth-last-child(-n + 2),
+  .sound-card:nth-last-child(-n + 2) {
     border-bottom: 0;
   }
 
@@ -740,6 +737,10 @@ h1 {
   }
 
   .video-card:nth-last-child(-n + 2) {
+    border-bottom: 2px solid var(--line);
+  }
+
+  .sound-card:nth-last-child(-n + 2) {
     border-bottom: 2px solid var(--line);
   }
 
