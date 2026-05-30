@@ -256,6 +256,7 @@ h1 {
 .text-section,
 .collection-section,
 .press-section,
+.video-section,
 .timeline-section {
   scroll-margin-top: 2.9rem;
   display: grid;
@@ -407,6 +408,60 @@ h1 {
   border-bottom: 0;
 }
 
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  background: var(--paper);
+}
+
+.video-card {
+  display: grid;
+  align-content: start;
+  gap: 0.85rem;
+  min-width: 0;
+  padding: 1rem;
+  border-right: 2px solid var(--line);
+  border-bottom: 2px solid var(--line);
+}
+
+.video-card:nth-child(2n) {
+  border-right: 0;
+}
+
+.video-card:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.video-type {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.video-card h3 {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.65vw, 1.45rem);
+  font-weight: 950;
+  line-height: 1.05;
+}
+
+.video-frame {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--ink);
+  border: 2px solid var(--line);
+}
+
+.video-frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 .event-list {
   margin: 0;
   padding: 0;
@@ -485,25 +540,29 @@ h1 {
 
   .catalog-labels,
   .fact-list,
-  .press-grid {
+  .press-grid,
+  .video-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .catalog-labels span:nth-child(2n),
   .fact-list div:nth-child(2n),
-  .press-card:nth-child(2n) {
+  .press-card:nth-child(2n),
+  .video-card:nth-child(2n) {
     border-right: 0;
   }
 
   .catalog-labels span,
   .fact-list div,
-  .press-card {
+  .press-card,
+  .video-card {
     border-bottom: 2px solid var(--line);
   }
 
   .catalog-labels span:last-child,
   .fact-list div:nth-last-child(-n + 2),
-  .press-card:nth-last-child(-n + 2) {
+  .press-card:nth-last-child(-n + 2),
+  .video-card:nth-last-child(-n + 2) {
     border-bottom: 0;
   }
 
@@ -519,6 +578,7 @@ h1 {
   .text-section,
   .collection-section,
   .press-section,
+  .video-section,
   .timeline-section {
     grid-template-columns: 4rem minmax(0, 1fr);
   }
@@ -526,6 +586,7 @@ h1 {
   .body-copy,
   .collection-list,
   .press-grid,
+  .video-grid,
   .event-list {
     grid-column: 1 / -1;
     border-top: 2px solid var(--line);
@@ -550,6 +611,7 @@ h1 {
   .action-row,
   .collection-list,
   .press-grid,
+  .video-grid,
   .event-list li {
     grid-template-columns: 1fr;
   }
@@ -558,21 +620,28 @@ h1 {
   .fact-list div,
   .action-row a,
   .collection-list > li,
-  .press-card {
+  .press-card,
+  .video-card {
     border-right: 0;
   }
 
   .catalog-labels span,
   .fact-list div,
   .collection-list > li,
-  .press-card {
+  .press-card,
+  .video-card {
+    border-bottom: 2px solid var(--line);
+  }
+
+  .video-card:nth-last-child(-n + 2) {
     border-bottom: 2px solid var(--line);
   }
 
   .catalog-labels span:last-child,
   .fact-list div:last-child,
   .collection-list > li:last-child,
-  .press-card:last-child {
+  .press-card:last-child,
+  .video-card:last-child {
     border-bottom: 0;
   }
 
@@ -583,6 +652,7 @@ h1 {
   .text-section,
   .collection-section,
   .press-section,
+  .video-section,
   .timeline-section {
     grid-template-columns: 3rem minmax(0, 1fr);
   }
