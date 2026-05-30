@@ -835,8 +835,8 @@ h1 {
 
 .social-links {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  max-width: 56rem;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  max-width: 76rem;
   margin-left: auto;
   border-left: 2px solid var(--line);
 }
@@ -888,6 +888,16 @@ h1 {
   mask-image: url("/image/social-icons/soundcloud.svg");
 }
 
+.social-icon-spotify {
+  -webkit-mask-image: url("/image/social-icons/spotify.svg");
+  mask-image: url("/image/social-icons/spotify.svg");
+}
+
+.social-icon-applemusic {
+  -webkit-mask-image: url("/image/social-icons/applemusic.svg");
+  mask-image: url("/image/social-icons/applemusic.svg");
+}
+
 .social-icon-facebook {
   -webkit-mask-image: url("/image/social-icons/facebook.svg");
   mask-image: url("/image/social-icons/facebook.svg");
@@ -912,6 +922,25 @@ h1 {
       "artifact"
       "facts"
       "actions";
+  }
+
+  .social-links {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: none;
+    margin-left: 0;
+    border-left: 0;
+  }
+
+  .social-links a {
+    border-bottom: 2px solid var(--line);
+  }
+
+  .social-links a:nth-child(3n) {
+    border-right: 0;
+  }
+
+  .social-links a:nth-last-child(-n + 3) {
+    border-bottom: 0;
   }
 
   .catalog-labels,
@@ -1128,6 +1157,10 @@ h1 {
   }
 
   .sound-card:nth-last-child(-n + 2) {
+    border-bottom: 2px solid var(--line);
+  }
+
+  .social-links a:nth-last-child(-n + 3) {
     border-bottom: 2px solid var(--line);
   }
 
