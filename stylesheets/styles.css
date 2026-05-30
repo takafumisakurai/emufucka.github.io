@@ -449,6 +449,7 @@ h1 {
 }
 
 .video-frame {
+  width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   background: var(--ink);
