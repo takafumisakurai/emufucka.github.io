@@ -620,9 +620,25 @@ h1 {
   box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--line);
 }
 
-.event-list span {
-  font-weight: 750;
-  line-height: 1.2;
+.event-detail {
+  display: grid;
+  min-width: 0;
+  gap: 0.22rem;
+}
+
+.event-title {
+  font-size: clamp(0.98rem, 1.05vw, 1.08rem);
+  font-weight: 950;
+  line-height: 1.08;
+}
+
+.event-meta {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.03em;
+  line-height: 1.15;
+  text-transform: uppercase;
 }
 
 .site-footer {
@@ -774,6 +790,10 @@ h1 {
 
   .event-list time {
     padding-right: 0.75rem;
+  }
+
+  .event-meta {
+    font-size: 0.72rem;
   }
 
   .catalog-labels span,
