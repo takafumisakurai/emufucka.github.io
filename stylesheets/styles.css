@@ -57,7 +57,7 @@ a {
 .action-row a,
 .fact-list dt,
 .section-number,
-.collection-list span,
+.collection-list > li > span,
 .artifact figcaption span {
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -257,6 +257,7 @@ h1 {
 .collection-section,
 .press-section,
 .timeline-section {
+  scroll-margin-top: 2.9rem;
   display: grid;
   grid-template-columns: 5rem minmax(13rem, 0.52fr) minmax(0, 1fr);
   border-bottom: 2px solid var(--line);
@@ -304,10 +305,11 @@ h1 {
   list-style: none;
 }
 
-.collection-list li {
+.collection-list > li {
   display: grid;
-  align-content: space-between;
-  min-height: 10rem;
+  align-content: start;
+  gap: 0.9rem;
+  min-height: 16rem;
   padding: 1rem;
   border-right: 2px solid var(--line);
   border-bottom: 2px solid var(--line);
@@ -316,18 +318,54 @@ h1 {
   line-height: 1;
 }
 
-.collection-list li:nth-child(2n) {
+.collection-list > li:nth-child(2n) {
   border-right: 0;
 }
 
-.collection-list li:nth-last-child(-n + 2) {
+.collection-list > li:nth-last-child(-n + 2) {
   border-bottom: 0;
 }
 
-.collection-list span {
+.collection-list > li > span {
   color: var(--accent);
   font-size: 0.72rem;
   font-weight: 950;
+}
+
+.collection-title {
+  display: block;
+  max-width: 18rem;
+}
+
+.source-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-self: end;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.source-list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.42rem 0.55rem;
+  background: rgba(248, 248, 243, 0.62);
+  border: 1px solid var(--line);
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.source-list a:hover,
+.source-list a:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+  outline: 0;
 }
 
 .press-grid {
@@ -502,21 +540,21 @@ h1 {
   .catalog-labels span,
   .fact-list div,
   .action-row a,
-  .collection-list li,
+  .collection-list > li,
   .press-grid span {
     border-right: 0;
   }
 
   .catalog-labels span,
   .fact-list div,
-  .collection-list li,
+  .collection-list > li,
   .press-grid span {
     border-bottom: 2px solid var(--line);
   }
 
   .catalog-labels span:last-child,
   .fact-list div:last-child,
-  .collection-list li:last-child,
+  .collection-list > li:last-child,
   .press-grid span:last-child {
     border-bottom: 0;
   }
