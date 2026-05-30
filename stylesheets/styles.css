@@ -317,8 +317,7 @@ h1 {
   border-bottom: 2px solid var(--line);
 }
 
-.document-card:nth-child(2),
-.document-card:nth-child(5) {
+.document-card:nth-child(3n + 2) {
   border-right: 0;
 }
 
@@ -798,6 +797,15 @@ h1 {
 
   .document-card:nth-child(2n) {
     border-right: 2px solid var(--line);
+  }
+
+  .document-card-studio-feature {
+    grid-column: 1 / -1;
+    border-right: 0;
+  }
+
+  .document-card-studio-feature img {
+    aspect-ratio: 16 / 9;
   }
 
   .document-card:nth-last-child(-n + 3) {
