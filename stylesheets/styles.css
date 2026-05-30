@@ -374,19 +374,36 @@ h1 {
   background: var(--paper);
 }
 
-.press-grid span {
+.press-card {
+  display: grid;
+  align-content: start;
+  gap: 0.85rem;
   min-width: 0;
+  min-height: 8.5rem;
   padding: 1rem;
   border-right: 2px solid var(--line);
   border-bottom: 2px solid var(--line);
-  font-weight: 850;
 }
 
-.press-grid span:nth-child(4n) {
+.press-card strong {
+  font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+  font-weight: 850;
+  line-height: 1.08;
+}
+
+.press-grid .source-list {
+  align-self: start;
+}
+
+.press-grid .source-list a {
+  font-size: 0.62rem;
+}
+
+.press-card:nth-child(4n) {
   border-right: 0;
 }
 
-.press-grid span:nth-last-child(-n + 4) {
+.press-card:nth-last-child(-n + 4) {
   border-bottom: 0;
 }
 
@@ -474,19 +491,19 @@ h1 {
 
   .catalog-labels span:nth-child(2n),
   .fact-list div:nth-child(2n),
-  .press-grid span:nth-child(2n) {
+  .press-card:nth-child(2n) {
     border-right: 0;
   }
 
   .catalog-labels span,
   .fact-list div,
-  .press-grid span {
+  .press-card {
     border-bottom: 2px solid var(--line);
   }
 
   .catalog-labels span:last-child,
   .fact-list div:nth-last-child(-n + 2),
-  .press-grid span:nth-last-child(-n + 2) {
+  .press-card:nth-last-child(-n + 2) {
     border-bottom: 0;
   }
 
@@ -541,21 +558,21 @@ h1 {
   .fact-list div,
   .action-row a,
   .collection-list > li,
-  .press-grid span {
+  .press-card {
     border-right: 0;
   }
 
   .catalog-labels span,
   .fact-list div,
   .collection-list > li,
-  .press-grid span {
+  .press-card {
     border-bottom: 2px solid var(--line);
   }
 
   .catalog-labels span:last-child,
   .fact-list div:last-child,
   .collection-list > li:last-child,
-  .press-grid span:last-child {
+  .press-card:last-child {
     border-bottom: 0;
   }
 
