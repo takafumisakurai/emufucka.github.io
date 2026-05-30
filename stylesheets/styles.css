@@ -550,19 +550,46 @@ h1 {
   outline: 0;
 }
 
+.timeline-ledger {
+  background: var(--paper);
+}
+
+.year-block {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 0.18fr) minmax(0, 1fr);
+  border-bottom: 2px solid var(--line);
+}
+
+.year-block:last-child {
+  border-bottom: 0;
+}
+
+.year-block h3 {
+  position: sticky;
+  top: 2.9rem;
+  align-self: start;
+  margin: 0;
+  padding: 1rem;
+  background: var(--paper);
+  border-right: 2px solid var(--line);
+  font-size: clamp(1.6rem, 3.2vw, 3.6rem);
+  font-weight: 950;
+  line-height: 0.82;
+}
+
 .event-list {
   margin: 0;
-  padding: 0;
-  background: var(--paper);
+  padding: 0.35rem 0;
   list-style: none;
 }
 
 .event-list li {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(8rem, 0.24fr) minmax(0, 1fr);
+  grid-template-columns: minmax(6.75rem, 0.19fr) minmax(0, 1fr);
   gap: 1rem;
   padding: 0.85rem 1rem;
-  border-bottom: 2px solid var(--line);
+  border-bottom: 1px solid rgba(5, 5, 5, 0.22);
 }
 
 .event-list li:last-child {
@@ -570,15 +597,31 @@ h1 {
 }
 
 .event-list time {
+  position: relative;
+  padding-right: 1rem;
+  border-right: 2px solid var(--line);
   color: var(--accent);
   font-size: 0.82rem;
   font-weight: 950;
   letter-spacing: 0.08em;
+  text-align: right;
   text-transform: uppercase;
+}
+
+.event-list time::after {
+  content: "";
+  position: absolute;
+  top: 0.44rem;
+  right: -0.43rem;
+  width: 0.58rem;
+  height: 0.58rem;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--line);
 }
 
 .event-list span {
   font-weight: 750;
+  line-height: 1.2;
 }
 
 .site-footer {
@@ -687,7 +730,7 @@ h1 {
   .press-grid,
   .video-grid,
   .sound-grid,
-  .event-list {
+  .timeline-ledger {
     grid-column: 1 / -1;
     border-top: 2px solid var(--line);
   }
@@ -713,8 +756,23 @@ h1 {
   .press-grid,
   .video-grid,
   .sound-grid,
-  .event-list li {
+  .year-block {
     grid-template-columns: 1fr;
+  }
+
+  .year-block h3 {
+    position: static;
+    border-right: 0;
+    border-bottom: 2px solid var(--line);
+  }
+
+  .event-list li {
+    grid-template-columns: minmax(4.8rem, 0.32fr) minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+
+  .event-list time {
+    padding-right: 0.75rem;
   }
 
   .catalog-labels span,
