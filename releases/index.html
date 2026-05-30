@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="EMUFUCKA Releases: Discogs API generated release and track index.">
+  <meta name="keywords" content="Emufucka, discography, releases, tracks, Discogs, future beat, bass, Tokyo, electronic music">
+  <!-- Adobe Launch -->
+  <script src="//assets.adobedtm.com/launch-EN55cd23628bbd44698a353b23d0bac718.min.js" async></script>
+  <!-- End Adobe Launch -->
+
+  <title>EMUFUCKA / Releases</title>
+  <link rel="shortcut icon" href="/image/avatars-000119125128-2ywodh-t500x500.jpg">
+  <link rel="apple-touch-icon" href="/image/avatars-000119125128-2ywodh-t500x500.jpg">
+  <link rel="stylesheet" href="/stylesheets/styles.css?v=discogs-releases-20260530">
+</head>
+
+<body class="room-page">
+  <header class="site-nav" aria-label="Site navigation">
+    <a class="nav-mark" href="/" aria-label="EMUFUCKA home">EMUFUCKA / ARCHIVE</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/provenance/">Provenance</a>
+      <a href="/documents/">Documents</a>
+      <a href="/collection/">Collection</a>
+      <a href="/press/">Press</a>
+      <a href="/video/">Video</a>
+      <a href="/audio/">Audio</a>
+      <a href="/releases/" aria-current="page">Releases</a>
+      <a href="/timeline/">Timeline</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="releases-section" id="releases" aria-labelledby="releases-heading">
+      <div class="section-number">07</div>
+      <div class="section-heading">
+        <p class="kicker">Discography</p>
+        <h2 id="releases-heading">Release and track ledger.</h2>
+      </div>
+      <div class="release-board">
+        <dl class="release-summary" aria-label="Discogs release summary" id="release-summary">
+          <div>
+            <dt>Discogs entries</dt>
+            <dd>--</dd>
+          </div>
+          <div>
+            <dt>Main releases</dt>
+            <dd>--</dd>
+          </div>
+          <div>
+            <dt>Track rows</dt>
+            <dd>--</dd>
+          </div>
+          <div>
+            <dt>Years</dt>
+            <dd>--</dd>
+          </div>
+        </dl>
+
+        <div class="release-source-panel" id="release-source">
+          <span>Source / Discogs API</span>
+          <a href="https://www.discogs.com/ja/artist/2192327-Emufucka" target="_blank" rel="noopener">Artist Page</a>
+          <time datetime="">Loading</time>
+        </div>
+
+        <div class="release-grid" aria-label="Discogs release and track index" id="release-grid">
+          <p class="release-empty">Loading Discogs release data.</p>
+        </div>
+      </div>
+    </section>
+
+    <nav class="room-pagination" aria-label="Room sequence">
+      <a href="/audio/">Previous / Audio</a>
+      <a href="/">Index</a>
+      <a href="/timeline/">Next / Timeline</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="social-links" aria-label="Social links">
+      <a href="https://soundcloud.com/emufucka" aria-label="Emufucka on SoundCloud" target="_blank" rel="noopener">
+        <span class="social-icon social-icon-soundcloud" aria-hidden="true"></span>
+      </a>
+      <a href="https://open.spotify.com/intl-ja/artist/1bqkaruezjnwOHxd4HUyx1" aria-label="Emufucka on Spotify" target="_blank" rel="noopener">
+        <span class="social-icon social-icon-spotify" aria-hidden="true"></span>
+      </a>
+      <a href="https://music.apple.com/us/artist/emufucka/424908075" aria-label="Emufucka on Apple Music" target="_blank" rel="noopener">
+        <span class="social-icon social-icon-applemusic" aria-hidden="true"></span>
+      </a>
+      <a href="https://www.facebook.com/emuf.cka" aria-label="Emufucka on Facebook" target="_blank" rel="noopener">
+        <span class="social-icon social-icon-facebook" aria-hidden="true"></span>
+      </a>
+      <a href="https://x.com/emufucka" aria-label="Emufucka on X" target="_blank" rel="noopener">
+        <span class="social-icon social-icon-x" aria-hidden="true"></span>
+      </a>
+      <a href="https://www.discogs.com/ja/artist/2192327-Emufucka" aria-label="Emufucka on Discogs" target="_blank" rel="noopener">
+        <span class="social-icon social-icon-discogs" aria-hidden="true"></span>
+      </a>
+    </nav>
+  </footer>
+
+  <script>
+    (() => {
+      const dataUrl = "/data/discogs-releases.slim.json?v=discogs-releases-20260530";
+      const summary = document.getElementById("release-summary");
+      const source = document.getElementById("release-source");
+      const grid = document.getElementById("release-grid");
+      const escapeHtml = (value) => String(value || "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[char]));
+
+      const renderTrackRows = (tracks) => {
+        if (!tracks.length) {
+          return '<p class="release-empty">Discogs track rows unavailable.</p>';
+        }
+
+        return '<ol class="track-list">' + tracks.map((track) => {
+          const artist = track.artist ? '<span class="track-artist">' + escapeHtml(track.artist) + '</span>' : '';
+          const credits = track.credits && track.credits.length
+            ? '<span class="track-credit">' + escapeHtml(track.credits.join(", ")) + '</span>'
+            : '';
+          const duration = track.duration ? '<span class="track-duration">' + escapeHtml(track.duration) + '</span>' : '';
+
+          return '<li><span class="track-position">' + escapeHtml(track.position || " ") + '</span>' +
+            '<span class="track-body"><strong>' + escapeHtml(track.title) + '</strong>' + artist + credits + '</span>' +
+            duration + '</li>';
+        }).join('') + '</ol>';
+      };
+
+      const renderCard = (release) => {
+        const roleTags = release.roles.map((role) => '<span>' + escapeHtml(role) + '</span>').join('');
+        const meta = [
+          ["Released", release.released || release.year],
+          ["Label", release.label],
+          ["Format", release.format],
+          ["Discogs", String(release.type || "").toUpperCase() + " / " + release.id]
+        ].filter((item) => item[1]);
+        const metaRows = meta.map(([label, value]) =>
+          '<div><dt>' + escapeHtml(label) + '</dt><dd>' + escapeHtml(value) + '</dd></div>'
+        ).join('');
+
+        return '<article class="release-card"><header><div class="release-code">' +
+          '<span>' + escapeHtml(release.code) + '</span><span>' + escapeHtml(release.year || "----") + '</span></div>' +
+          '<h3>' + escapeHtml(release.title) + '</h3><p>' + escapeHtml(release.artist) + '</p></header>' +
+          '<div class="role-list" aria-label="Discogs roles">' + roleTags + '</div>' +
+          '<dl class="release-meta">' + metaRows + '</dl>' +
+          renderTrackRows(release.tracks || []) +
+          '<a class="release-link" href="' + escapeHtml(release.discogs_url) + '" target="_blank" rel="noopener">Open on Discogs</a></article>';
+      };
+
+      fetch(dataUrl)
+        .then((response) => {
+          if (!response.ok) throw new Error("Discogs data unavailable");
+          return response.json();
+        })
+        .then((data) => {
+          const values = [data.release_count, data.primary_count, data.track_count, data.year_range];
+          summary.querySelectorAll("dd").forEach((node, index) => {
+            node.textContent = values[index];
+          });
+          source.querySelector("time").dateTime = data.generated_at;
+          source.querySelector("time").textContent = data.generated_label;
+          grid.innerHTML = data.releases.map(renderCard).join('');
+        })
+        .catch(() => {
+          grid.innerHTML = '<p class="release-empty">Discogs release data could not be loaded.</p>';
+        });
+    })();
+  </script>
+</body>
+
+</html>

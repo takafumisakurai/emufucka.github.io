@@ -10,6 +10,7 @@ collection/index.html
 press/index.html
 video/index.html
 audio/index.html
+releases/index.html
 timeline/index.html
 '
 
