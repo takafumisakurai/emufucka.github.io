@@ -2,10 +2,22 @@
 set -eu
 
 tag='//assets.adobedtm.com/launch-EN55cd23628bbd44698a353b23d0bac718.min.js'
+pages='
+index.html
+provenance/index.html
+documents/index.html
+collection/index.html
+press/index.html
+video/index.html
+audio/index.html
+timeline/index.html
+'
 
-if ! grep -Fq "$tag" index.html; then
-  printf '%s\n' "Missing Adobe Launch/AEP Tags script in index.html" >&2
-  exit 1
-fi
+for page in $pages; do
+  if ! grep -Fq "$tag" "$page"; then
+    printf '%s\n' "Missing Adobe Launch/AEP Tags script in $page" >&2
+    exit 1
+  fi
+done
 
-printf '%s\n' "Adobe Launch/AEP Tags script is present."
+printf '%s\n' "Adobe Launch/AEP Tags script is present in archive pages."

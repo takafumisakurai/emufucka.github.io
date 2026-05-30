@@ -83,7 +83,8 @@ a {
 }
 
 .nav-links a:hover,
-.nav-links a:focus-visible {
+.nav-links a:focus-visible,
+.nav-links a[aria-current="page"] {
   border-color: var(--line);
   outline: 0;
 }
@@ -96,7 +97,7 @@ a {
     "type artifact"
     "facts facts"
     "actions actions";
-  min-height: calc(100svh - 2.9rem);
+  min-height: auto;
   border-bottom: 2px solid var(--line);
 }
 
@@ -255,6 +256,7 @@ h1 {
 }
 
 .text-section,
+.room-directory,
 .documents-section,
 .collection-section,
 .press-section,
@@ -289,6 +291,10 @@ h1 {
   line-height: 0.88;
 }
 
+.room-page .section-heading h2 {
+  font-size: clamp(2rem, 3.4vw, 3.7rem);
+}
+
 .body-copy {
   max-width: 62rem;
   padding: clamp(1rem, 3vw, 2rem);
@@ -298,6 +304,112 @@ h1 {
 
 .body-copy p {
   margin-bottom: 1.2rem;
+}
+
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  background: var(--paper);
+}
+
+.room-card {
+  display: grid;
+  align-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+  min-height: 18rem;
+  padding: 1rem;
+  border-right: 2px solid var(--line);
+  border-bottom: 2px solid var(--line);
+  color: var(--ink);
+}
+
+.room-card:nth-child(4n) {
+  border-right: 0;
+}
+
+.room-card:nth-last-child(-n + 3) {
+  border-bottom: 0;
+}
+
+.room-card:last-child {
+  border-right: 0;
+}
+
+.room-card span,
+.room-card small,
+.room-pagination a {
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.room-card span {
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 950;
+}
+
+.room-card strong {
+  font-size: clamp(1.25rem, 2.2vw, 2.4rem);
+  font-weight: 950;
+  line-height: 0.92;
+}
+
+.room-card em {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-style: normal;
+  font-weight: 850;
+  line-height: 1.18;
+}
+
+.room-card small {
+  align-self: end;
+  font-size: 0.65rem;
+  font-weight: 950;
+}
+
+.room-card:hover,
+.room-card:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+  outline: 0;
+}
+
+.room-card:hover span,
+.room-card:focus-visible span,
+.room-card:hover em,
+.room-card:focus-visible em {
+  color: var(--paper);
+}
+
+.room-pagination {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 2px solid var(--line);
+}
+
+.room-pagination a {
+  display: grid;
+  min-height: 4.2rem;
+  place-items: center;
+  padding: 0.75rem;
+  background: var(--bg);
+  border-right: 2px solid var(--line);
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-align: center;
+}
+
+.room-pagination a:last-child {
+  border-right: 0;
+}
+
+.room-pagination a:hover,
+.room-pagination a:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+  outline: 0;
 }
 
 .document-grid {
@@ -763,6 +875,7 @@ h1 {
 
   .catalog-labels,
   .fact-list,
+  .room-grid,
   .document-grid,
   .press-grid,
   .video-grid,
@@ -772,9 +885,18 @@ h1 {
 
   .catalog-labels span:nth-child(2n),
   .fact-list div:nth-child(2n),
+  .room-card:nth-child(2n),
   .document-card:nth-child(2n),
   .press-card:nth-child(2n) {
     border-right: 0;
+  }
+
+  .room-card:nth-last-child(-n + 3) {
+    border-bottom: 2px solid var(--line);
+  }
+
+  .room-card:nth-last-child(-n + 1) {
+    border-bottom: 0;
   }
 
   .document-card,
@@ -860,6 +982,7 @@ h1 {
   }
 
   .text-section,
+  .room-directory,
   .documents-section,
   .collection-section,
   .press-section,
@@ -870,6 +993,7 @@ h1 {
   }
 
   .body-copy,
+  .room-grid,
   .document-grid,
   .collection-list,
   .press-grid,
@@ -897,6 +1021,7 @@ h1 {
   .catalog-labels,
   .fact-list,
   .action-row,
+  .room-grid,
   .document-grid,
   .collection-list,
   .press-grid,
@@ -928,6 +1053,7 @@ h1 {
   .catalog-labels span,
   .fact-list div,
   .action-row a,
+  .room-card,
   .document-card,
   .collection-list > li,
   .press-card,
@@ -938,6 +1064,7 @@ h1 {
 
   .catalog-labels span,
   .fact-list div,
+  .room-card,
   .document-card,
   .collection-list > li,
   .press-card,
@@ -968,6 +1095,7 @@ h1 {
 
   .catalog-labels span:last-child,
   .fact-list div:last-child,
+  .room-card:last-child,
   .document-card:last-child,
   .collection-list > li:last-child,
   .press-card:last-child,
@@ -980,6 +1108,7 @@ h1 {
   }
 
   .text-section,
+  .room-directory,
   .documents-section,
   .collection-section,
   .press-section,
