@@ -58,7 +58,8 @@ a {
 .fact-list dt,
 .section-number,
 .collection-list > li > span,
-.artifact figcaption span {
+.artifact figcaption span,
+.document-card figcaption span {
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -254,6 +255,7 @@ h1 {
 }
 
 .text-section,
+.documents-section,
 .collection-section,
 .press-section,
 .video-section,
@@ -296,6 +298,80 @@ h1 {
 
 .body-copy p {
   margin-bottom: 1.2rem;
+}
+
+.document-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  background: var(--paper);
+}
+
+.document-card {
+  display: grid;
+  grid-column: span 2;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  margin: 0;
+  background: var(--paper);
+  border-right: 2px solid var(--line);
+  border-bottom: 2px solid var(--line);
+}
+
+.document-card:nth-child(2),
+.document-card:nth-child(5) {
+  border-right: 0;
+}
+
+.document-card:nth-last-child(-n + 3) {
+  border-bottom: 0;
+}
+
+.document-card-feature {
+  grid-column: span 4;
+}
+
+.document-card img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  background: var(--ink);
+}
+
+.document-card-feature img {
+  aspect-ratio: 16 / 10;
+  object-position: 50% 50%;
+}
+
+.document-card figcaption {
+  display: grid;
+  align-content: start;
+  gap: 0.3rem;
+  min-height: 8.2rem;
+  padding: 0.85rem 1rem 1rem;
+  border-top: 2px solid var(--line);
+}
+
+.document-card figcaption span {
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 950;
+}
+
+.document-card figcaption strong {
+  font-size: clamp(1rem, 1.35vw, 1.28rem);
+  font-weight: 950;
+  line-height: 1.03;
+}
+
+.document-card figcaption em {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-style: normal;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  text-transform: uppercase;
 }
 
 .collection-list {
@@ -688,6 +764,7 @@ h1 {
 
   .catalog-labels,
   .fact-list,
+  .document-grid,
   .press-grid,
   .video-grid,
   .sound-grid {
@@ -696,8 +773,39 @@ h1 {
 
   .catalog-labels span:nth-child(2n),
   .fact-list div:nth-child(2n),
+  .document-card:nth-child(2n),
   .press-card:nth-child(2n) {
     border-right: 0;
+  }
+
+  .document-card,
+  .document-card-feature {
+    grid-column: span 1;
+  }
+
+  .document-card-feature {
+    grid-column: 1 / -1;
+    border-right: 0;
+  }
+
+  .document-card-feature img {
+    aspect-ratio: 16 / 9;
+  }
+
+  .document-card:nth-child(2n + 1) {
+    border-right: 0;
+  }
+
+  .document-card:nth-child(2n) {
+    border-right: 2px solid var(--line);
+  }
+
+  .document-card:nth-last-child(-n + 3) {
+    border-bottom: 2px solid var(--line);
+  }
+
+  .document-card:nth-last-child(-n + 2) {
+    border-bottom: 0;
   }
 
   .video-card:nth-child(2n) {
@@ -710,6 +818,7 @@ h1 {
 
   .catalog-labels span,
   .fact-list div,
+  .document-card,
   .press-card,
   .video-card,
   .sound-card {
@@ -718,9 +827,18 @@ h1 {
 
   .catalog-labels span:last-child,
   .fact-list div:nth-last-child(-n + 2),
+  .document-card:nth-last-child(-n + 2),
   .press-card:nth-last-child(-n + 2),
   .video-card:nth-last-child(-n + 2),
   .sound-card:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .document-card:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .document-card:last-child {
     border-bottom: 0;
   }
 
@@ -734,6 +852,7 @@ h1 {
   }
 
   .text-section,
+  .documents-section,
   .collection-section,
   .press-section,
   .video-section,
@@ -743,6 +862,7 @@ h1 {
   }
 
   .body-copy,
+  .document-grid,
   .collection-list,
   .press-grid,
   .video-grid,
@@ -769,6 +889,7 @@ h1 {
   .catalog-labels,
   .fact-list,
   .action-row,
+  .document-grid,
   .collection-list,
   .press-grid,
   .video-grid,
@@ -799,6 +920,7 @@ h1 {
   .catalog-labels span,
   .fact-list div,
   .action-row a,
+  .document-card,
   .collection-list > li,
   .press-card,
   .video-card,
@@ -808,6 +930,7 @@ h1 {
 
   .catalog-labels span,
   .fact-list div,
+  .document-card,
   .collection-list > li,
   .press-card,
   .video-card,
@@ -827,8 +950,17 @@ h1 {
     border-bottom: 0;
   }
 
+  .document-card:nth-child(2n + 1) {
+    border-right: 0;
+  }
+
+  .document-card:nth-last-child(-n + 2) {
+    border-bottom: 2px solid var(--line);
+  }
+
   .catalog-labels span:last-child,
   .fact-list div:last-child,
+  .document-card:last-child,
   .collection-list > li:last-child,
   .press-card:last-child,
   .video-card:last-child {
@@ -840,6 +972,7 @@ h1 {
   }
 
   .text-section,
+  .documents-section,
   .collection-section,
   .press-section,
   .video-section,
