@@ -13,7 +13,7 @@
   <title>EMUFUCKA / Releases</title>
   <link rel="shortcut icon" href="/image/avatars-000119125128-2ywodh-t500x500.jpg">
   <link rel="apple-touch-icon" href="/image/avatars-000119125128-2ywodh-t500x500.jpg">
-  <link rel="stylesheet" href="/stylesheets/styles.css?v=discogs-categories-20260531">
+  <link rel="stylesheet" href="/stylesheets/styles.css?v=discogs-artwork-20260531">
   <style>
     .release-summary { grid-template-columns: repeat(5, minmax(0, 1fr)); }
     .release-taxonomy { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 2px solid var(--line); }
@@ -30,11 +30,21 @@
     .release-shelf-heading h3 { font-size: clamp(1.1rem, 2vw, 1.8rem); }
     .release-shelf-heading span { color: var(--paper); }
     .release-subheading { padding: 0.7rem 1rem; border-bottom: 2px solid var(--line); color: var(--accent); font-size: 0.66rem; font-weight: 950; letter-spacing: 0.1em; text-transform: uppercase; }
+    .release-card { grid-template-columns: minmax(8rem, 0.34fr) minmax(0, 1fr); gap: 0; padding: 0; }
+    .release-art { display: grid; align-self: start; min-width: 0; aspect-ratio: 1; margin: 0; background: var(--ink); border-right: 2px solid var(--line); color: var(--paper); overflow: hidden; }
+    .release-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    .release-art-placeholder { display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; min-height: 100%; padding: 0.72rem; font-weight: 950; letter-spacing: 0.08em; line-height: 0.9; text-transform: uppercase; }
+    .release-art-placeholder span:first-child { color: var(--accent); font-size: 0.68rem; }
+    .release-art-placeholder span:last-child { overflow-wrap: anywhere; font-size: clamp(1.2rem, 2vw, 2rem); }
+    .release-card-body { display: grid; align-content: start; gap: 0.85rem; min-width: 0; padding: 1rem; }
+    .release-discogs-note { color: var(--muted); font-size: 0.58rem; font-weight: 950; letter-spacing: 0.08em; line-height: 1.1; text-transform: uppercase; }
     .release-card-credit h3 { font-size: clamp(1.25rem, 2.1vw, 2.2rem); }
     @media (max-width: 620px) {
       .release-summary, .release-taxonomy { grid-template-columns: 1fr; }
       .release-taxonomy-card { border-right: 0; border-bottom: 2px solid var(--line); }
       .release-taxonomy-card:last-child { border-bottom: 0; }
+      .release-card { grid-template-columns: 1fr; }
+      .release-art { border-right: 0; border-bottom: 2px solid var(--line); }
     }
   </style>
 </head>
@@ -71,7 +81,7 @@
         </dl>
 
         <div class="release-source-panel" id="release-source">
-          <span>Source / Discogs API</span>
+          <span>Data provided by Discogs</span>
           <a href="https://www.discogs.com/ja/artist/2192327-Emufucka" target="_blank" rel="noopener">Artist Page</a>
           <time datetime="">Loading</time>
         </div>
@@ -105,7 +115,8 @@
 
   <script>
     (() => {
-      const dataUrl = "/data/discogs-releases.slim.json?v=discogs-categories-20260531";
+      const dataUrl = "/data/discogs-releases.slim.json?v=discogs-artwork-20260531";
+      const artworkApiUrl = "https://api.discogs.com/artists/2192327/releases?per_page=100&page=1&sort=year&sort_order=desc";
       const byId = (id) => document.getElementById(id);
       const escapeHtml = (value) => String(value || "").replace(/[&<>"']/g, (char) => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -169,6 +180,10 @@
           label: release.label,
           format: release.format,
           discogs_url: release.discogs_url,
+          image_url: release.image_url,
+          image_thumb: release.image_thumb,
+          image_width: release.image_width,
+          image_height: release.image_height,
           role: creditRole(credit),
           credit,
           tracks: [track]
@@ -188,6 +203,10 @@
           label: release.label,
           format: release.format,
           discogs_url: release.discogs_url,
+          image_url: release.image_url,
+          image_thumb: release.image_thumb,
+          image_width: release.image_width,
+          image_height: release.image_height,
           role: "Producer",
           credit: "Emufucka / Producer",
           group_label: "Production",
@@ -230,18 +249,50 @@
         '</span>' + (track.duration ? '<span class="track-duration">' + escapeHtml(track.duration) + '</span>' : '') + '</li>'
       ).join('') + '</ol>' : '';
       const metaRows = (rows) => rows.filter((row) => row[1]).map(([label, value]) => '<div><dt>' + escapeHtml(label) + '</dt><dd>' + escapeHtml(value) + '</dd></div>').join('');
-      const releaseCard = (release) => '<article class="release-card"><header><div class="release-code"><span>' +
+      const fetchArtworkIndex = () => fetch(artworkApiUrl).then((response) => response.json()).then((payload) => {
+        const index = new Map();
+        (payload.releases || []).forEach((item) => {
+          const image = item.cover_image || item.thumb || "";
+          const thumb = item.thumb || item.cover_image || "";
+          if (item.id && (image || thumb)) index.set(String(item.id), { image_url: image, image_thumb: thumb });
+        });
+        return index;
+      }).catch(() => new Map());
+      const applyArtwork = (data, artworkIndex) => {
+        const hydrate = (entry) => {
+          const artwork = artworkIndex.get(String(entry.id || entry.release_id));
+          if (!artwork) return entry;
+          return {
+            ...entry,
+            image_url: entry.image_url || artwork.image_url,
+            image_thumb: entry.image_thumb || artwork.image_thumb
+          };
+        };
+        return {
+          ...data,
+          releases: (data.releases || []).map(hydrate),
+          credit_entries: (data.credit_entries || []).map(hydrate)
+        };
+      };
+      const releaseArtwork = (entry, code) => {
+        const source = entry.image_url || entry.image_thumb;
+        if (source) {
+          return '<figure class="release-art"><img src="' + escapeHtml(source) + '" alt="' + escapeHtml(entry.title) + ' cover artwork" loading="lazy" decoding="async"></figure>';
+        }
+        return '<figure class="release-art"><div class="release-art-placeholder"><span>' + escapeHtml(code) + '</span><span>No image on Discogs</span></div></figure>';
+      };
+      const releaseCard = (release) => '<article class="release-card">' + releaseArtwork(release, release.code) + '<div class="release-card-body"><header><div class="release-code"><span>' +
         escapeHtml(release.code) + '</span><span>' + escapeHtml(release.year || "----") + '</span></div><h3>' +
         escapeHtml(release.title) + '</h3><p>' + escapeHtml(release.artist) + '</p></header><div class="role-list">' +
         (release.roles || []).map((role) => '<span>' + escapeHtml(role) + '</span>').join('') + '</div><dl class="release-meta">' +
         metaRows([["Released", release.released || release.year], ["Label", release.label], ["Format", release.format], ["Discogs", String(release.type || "").toUpperCase() + " / " + release.id]]) +
-        '</dl>' + renderTracks(release.tracks) + '<a class="release-link" href="' + escapeHtml(release.discogs_url) + '" target="_blank" rel="noopener">Open on Discogs</a></article>';
-      const creditCard = (entry) => '<article class="release-card release-card-credit"><header><div class="release-code"><span>' +
+        '</dl>' + renderTracks(release.tracks) + '<span class="release-discogs-note">Data provided by Discogs.</span><a class="release-link" href="' + escapeHtml(release.discogs_url) + '" target="_blank" rel="noopener">Open on Discogs</a></div></article>';
+      const creditCard = (entry) => '<article class="release-card release-card-credit">' + releaseArtwork(entry, entry.code) + '<div class="release-card-body"><header><div class="release-code"><span>' +
         escapeHtml(entry.code) + '</span><span>' + escapeHtml(entry.year || "----") + '</span></div><h3>' +
         escapeHtml(entry.title) + '</h3><p>' + escapeHtml(entry.artist) + '</p></header><div class="role-list"><span>' +
         escapeHtml(entry.group_label) + '</span><span>' + escapeHtml(entry.section) + '</span></div><dl class="release-meta">' +
         metaRows([["Released", entry.released || entry.year], ["Credit", entry.credit], ["Label", entry.label], ["Discogs", String(entry.type || "").toUpperCase() + " / " + entry.release_id]]) +
-        '</dl>' + renderTracks(entry.tracks) + '<a class="release-link" href="' + escapeHtml(entry.discogs_url) + '" target="_blank" rel="noopener">Open on Discogs</a></article>';
+        '</dl>' + renderTracks(entry.tracks) + '<span class="release-discogs-note">Data provided by Discogs.</span><a class="release-link" href="' + escapeHtml(entry.discogs_url) + '" target="_blank" rel="noopener">Open on Discogs</a></div></article>';
       const taxonomyCard = (item) => '<article class="release-taxonomy-card"><header><h3>' + escapeHtml(item.label) + '</h3><strong>' +
         escapeHtml(item.count) + '</strong></header><ol>' + (item.children || []).map((child) =>
           '<li><span>' + escapeHtml(child.label) + (child.section ? " / " + escapeHtml(child.section) : "") + '</span><strong>' + escapeHtml(child.count) + '</strong></li>'
@@ -251,13 +302,16 @@
       const releaseSub = (data, group, section) => subShelf(section, data.releases.filter((release) => release.taxonomy_group === group && release.taxonomy_section === section), releaseCard);
       const creditSub = (data, groupLabel, section) => subShelf(groupLabel + " / " + section, data.credit_entries.filter((entry) => entry.group_label === groupLabel && entry.section === section), creditCard);
 
-      fetch(dataUrl).then((response) => response.json()).then((raw) => {
-        const data = normalizeData(raw);
+      Promise.all([
+        fetch(dataUrl).then((response) => response.json()),
+        fetchArtworkIndex()
+      ]).then(([raw, artworkIndex]) => {
+        const data = applyArtwork(normalizeData(raw), artworkIndex);
         byId("release-summary").querySelectorAll("dd").forEach((node, index) => {
           node.textContent = [data.category_counts.releases, data.category_counts.appearances, data.category_counts.unofficial, data.category_counts.credits, data.year_range][index];
         });
         const verifiedLabel = data.generated_label && data.generated_label > "2026-05-31" ? data.generated_label : "2026-05-31";
-        byId("release-source").querySelector("span").textContent = "Source / Discogs API / " + data.release_count + " entries";
+        byId("release-source").querySelector("span").textContent = "Data provided by Discogs / " + data.release_count + " entries";
         byId("release-source").querySelector("time").dateTime = verifiedLabel;
         byId("release-source").querySelector("time").textContent = verifiedLabel;
         byId("release-taxonomy").innerHTML = data.taxonomy.map(taxonomyCard).join('');
