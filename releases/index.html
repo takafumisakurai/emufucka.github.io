@@ -248,6 +248,43 @@
         ((track.credits || []).length ? '<span class="track-credit">' + escapeHtml(track.credits.join(", ")) + '</span>' : '') +
         '</span>' + (track.duration ? '<span class="track-duration">' + escapeHtml(track.duration) + '</span>' : '') + '</li>'
       ).join('') + '</ol>' : '';
+      const mergeCodes = (codes) => {
+        const unique = [...new Set(codes.filter(Boolean))];
+        const parsed = unique.map((code) => String(code).match(/^(.*?)(\d+)$/));
+        if (unique.length > 1 && parsed.every(Boolean) && parsed.every((match) => match[1] === parsed[0][1])) {
+          const width = parsed[0][2].length;
+          const numbers = parsed.map((match) => Number(match[2])).sort((a, b) => a - b);
+          return parsed[0][1] + String(numbers[0]).padStart(width, "0") + "-" + String(numbers[numbers.length - 1]).padStart(width, "0");
+        }
+        return unique.join(" / ");
+      };
+      const mergeTracks = (tracks) => {
+        const seen = new Set();
+        return tracks.filter((track) => {
+          const key = [track.position, track.title, track.artist, track.duration].join("|");
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+      };
+      const mergeCreditEntries = (entries) => {
+        const byRelease = new Map();
+        entries.forEach((entry) => {
+          const key = [entry.group_label, entry.section, entry.release_id || entry.id, entry.credit].join("|");
+          if (!byRelease.has(key)) {
+            byRelease.set(key, { ...entry, codes: [], credit_count: 0, tracks: [] });
+          }
+          const merged = byRelease.get(key);
+          merged.codes.push(entry.code);
+          merged.credit_count += 1;
+          merged.tracks.push(...(entry.tracks || []));
+        });
+        return [...byRelease.values()].map((entry) => ({
+          ...entry,
+          code: mergeCodes(entry.codes),
+          tracks: mergeTracks(entry.tracks)
+        }));
+      };
       const metaRows = (rows) => rows.filter((row) => row[1]).map(([label, value]) => '<div><dt>' + escapeHtml(label) + '</dt><dd>' + escapeHtml(value) + '</dd></div>').join('');
       const fetchArtworkIndex = () => fetch(artworkUrl).then((response) => response.json()).then((payload) => {
         const index = new Map();
@@ -289,16 +326,22 @@
         escapeHtml(entry.code) + '</span><span>' + escapeHtml(entry.year || "----") + '</span></div><h3>' +
         escapeHtml(entry.title) + '</h3><p>' + escapeHtml(entry.artist) + '</p></header><div class="role-list"><span>' +
         escapeHtml(entry.group_label) + '</span><span>' + escapeHtml(entry.section) + '</span></div><dl class="release-meta">' +
-        metaRows([["Released", entry.released || entry.year], ["Credit", entry.credit], ["Label", entry.label], ["Discogs", String(entry.type || "").toUpperCase() + " / " + entry.release_id]]) +
+        metaRows([["Released", entry.released || entry.year], ["Credit", entry.credit], ["Entries", entry.credit_count > 1 ? entry.credit_count + " credits" : ""], ["Label", entry.label], ["Discogs", String(entry.type || "").toUpperCase() + " / " + entry.release_id]]) +
         '</dl>' + renderTracks(entry.tracks) + '<span class="release-discogs-note">Data provided by Discogs.</span><a class="release-link" href="' + escapeHtml(entry.discogs_url) + '" target="_blank" rel="noopener">Open on Discogs</a></div></article>';
       const taxonomyCard = (item) => '<article class="release-taxonomy-card"><header><h3>' + escapeHtml(item.label) + '</h3><strong>' +
         escapeHtml(item.count) + '</strong></header><ol>' + (item.children || []).map((child) =>
           '<li><span>' + escapeHtml(child.label) + (child.section ? " / " + escapeHtml(child.section) : "") + '</span><strong>' + escapeHtml(child.count) + '</strong></li>'
         ).join('') + '</ol></article>';
-      const subShelf = (title, items, renderer) => items.length ? '<div class="release-subheading"><span>' + escapeHtml(title) + '</span><strong>' + items.length + '</strong></div><div class="release-grid">' + items.map(renderer).join('') + '</div>' : '';
+      const subShelf = (title, items, renderer, totalCount) => {
+        const countLabel = totalCount && totalCount !== items.length ? items.length + " releases / " + totalCount + " credits" : String(items.length);
+        return items.length ? '<div class="release-subheading"><span>' + escapeHtml(title) + '</span><strong>' + escapeHtml(countLabel) + '</strong></div><div class="release-grid">' + items.map(renderer).join('') + '</div>' : '';
+      };
       const shelf = (title, count, body) => body ? '<section class="release-shelf"><header class="release-shelf-heading"><h3>' + escapeHtml(title) + '</h3><span>' + count + '</span></header>' + body + '</section>' : '';
       const releaseSub = (data, group, section) => subShelf(section, data.releases.filter((release) => release.taxonomy_group === group && release.taxonomy_section === section), releaseCard);
-      const creditSub = (data, groupLabel, section) => subShelf(groupLabel + " / " + section, data.credit_entries.filter((entry) => entry.group_label === groupLabel && entry.section === section), creditCard);
+      const creditSub = (data, groupLabel, section) => {
+        const entries = data.credit_entries.filter((entry) => entry.group_label === groupLabel && entry.section === section);
+        return subShelf(groupLabel + " / " + section, mergeCreditEntries(entries), creditCard, entries.length);
+      };
 
       Promise.all([
         fetch(dataUrl).then((response) => response.json()),
