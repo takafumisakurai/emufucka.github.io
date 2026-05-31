@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="/stylesheets/styles.css?v=press-ledger-20260531">
   <style>
     .press-board { grid-column: 1 / -1; background: var(--paper); border-top: 2px solid var(--line); }
-    .press-summary { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 0; border-bottom: 2px solid var(--line); }
+    .press-summary { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); margin: 0; border-bottom: 2px solid var(--line); }
     .press-summary div { min-width: 0; padding: 0.85rem 1rem; border-right: 2px solid var(--line); }
     .press-summary div:last-child { border-right: 0; }
     .press-summary dt { color: var(--muted); font-size: 0.62rem; font-weight: 950; letter-spacing: 0.1em; text-transform: uppercase; }
@@ -32,10 +32,12 @@
     .press-source, .press-dash { color: var(--muted); font-size: 0.68rem; font-weight: 950; letter-spacing: 0.06em; text-transform: uppercase; }
     .press-ledger a { min-width: 0; color: var(--ink); font-size: clamp(0.92rem, 1.2vw, 1.08rem); font-weight: 850; line-height: 1.15; text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.18em; }
     .press-ledger a:hover, .press-ledger a:focus-visible { color: var(--accent); outline: 0; }
+    .press-ledger li.press-unlinked { grid-template-columns: minmax(0, 1fr); }
+    .press-ledger li.press-unlinked .press-source { color: var(--ink); font-size: clamp(0.92rem, 1.2vw, 1.08rem); letter-spacing: 0.04em; }
     @media (max-width: 760px) {
       .press-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .press-summary div:nth-child(2n) { border-right: 0; }
-      .press-summary div:last-child { grid-column: 1 / -1; border-top: 2px solid var(--line); }
+      .press-summary div:nth-child(n + 3) { border-top: 2px solid var(--line); }
       .press-ledger li { grid-template-columns: 1fr; gap: 0.3rem; }
       .press-dash { display: none; }
     }
@@ -71,6 +73,7 @@
           <div><dt>Radio</dt><dd>--</dd></div>
           <div><dt>References</dt><dd>--</dd></div>
           <div><dt>Profiles</dt><dd>--</dd></div>
+          <div><dt>Lost Sources</dt><dd>--</dd></div>
         </dl>
         <div id="press-ledger" aria-label="Linked press ledger"></div>
       </div>
@@ -101,7 +104,8 @@
         ["News / Events", "News / Events"],
         ["Radio", "Radio / Broadcast"],
         ["References", "Confirmed References"],
-        ["Profiles", "Profiles / Retail"]
+        ["Profiles", "Profiles / Retail"],
+        ["Unlinked", "Lost Sources"]
       ];
       const rows = [
         ["Articles", "dublab", "米国", "Carlos Nino + Miguel Atwood-Ferguson “Into Eternity” from LA♥JPN♥LA", "https://www.dublab.com/carlos-nino-miguel-atwood-ferguson-into-eternity-from-la%E2%99%A5jpn%E2%99%A5la/"],
@@ -192,7 +196,16 @@
         ["References", "Urban Buddha Music", "国不明／英語圏ブログ", "RED BULL MUSIC ACADEMY Sonar FestivalDôme 2014 Playlist", "https://urbanbuddhamusic.wordpress.com/2014/04/10/red-bull-music-academy-sonar-festivaldome-2014-playlist/"],
         ["References", "Summer Festival Guide", "英国", "Sonar Barcelona", "https://www.summerfestivalguide.co.uk/festival-news/sonar-barcelona/"],
         ["References", "Resident Advisor", "英国／国際", "Red Bull Music Academy presents Lost In Karaoke", "https://ra.co/events/766032"],
-        ["References", "Music Connection Magazine", "米国", "Red Bull Music Academy Tokyo Applications Now Open", "https://www.musicconnection.com/red-bull-music-academy-tokyo-applications-open/"]
+        ["References", "Music Connection Magazine", "米国", "Red Bull Music Academy Tokyo Applications Now Open", "https://www.musicconnection.com/red-bull-music-academy-tokyo-applications-open/"],
+        ["Unlinked", "BBC Radio 1Xtra", "英国", "", ""],
+        ["Unlinked", "BBC Radio 6 / BBC 6 Music", "英国", "", ""],
+        ["Unlinked", "KCRW", "米国", "", ""],
+        ["Unlinked", "DJ Mag", "英国", "", ""],
+        ["Unlinked", "The Word Magazine", "ベルギー／英国", "", ""],
+        ["Unlinked", "VICE Magazine", "米国／国際", "", ""],
+        ["Unlinked", "Okayplayer", "米国", "", ""],
+        ["Unlinked", "Jus Like Music", "英国", "", ""],
+        ["Unlinked", "The Wire", "英国", "", ""]
       ];
       const escapeHtml = (value) => String(value || "").replace(/[&<>"']/g, (char) => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -200,13 +213,16 @@
       const seen = new Set();
       const uniqueRows = rows.filter((row) => {
         const url = row[4];
-        if (!url || seen.has(url)) return false;
+        if (!url) return row[0] === "Unlinked";
+        if (seen.has(url)) return false;
         seen.add(url);
         return true;
       });
       const renderRow = ([, media, country, title, url]) =>
-        '<li><span class="press-source">' + escapeHtml(media) + ' (' + escapeHtml(country) + ')</span><span class="press-dash">-</span><a href="' +
-        escapeHtml(url) + '" target="_blank" rel="noopener">' + escapeHtml(title) + '</a></li>';
+        url
+          ? '<li><span class="press-source">' + escapeHtml(media) + ' (' + escapeHtml(country) + ')</span><span class="press-dash">-</span><a href="' +
+            escapeHtml(url) + '" target="_blank" rel="noopener">' + escapeHtml(title) + '</a></li>'
+          : '<li class="press-unlinked"><span class="press-source">' + escapeHtml(media) + ' (' + escapeHtml(country) + ')</span></li>';
       document.getElementById("press-ledger").innerHTML = groups.map(([key, label]) => {
         const items = uniqueRows.filter((row) => row[0] === key);
         return '<section class="press-ledger-section"><header class="press-ledger-heading"><h3>' + escapeHtml(label) +
