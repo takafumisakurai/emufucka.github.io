@@ -258,7 +258,7 @@
       }).catch(() => new Map());
       const applyArtwork = (data, artworkIndex) => {
         const hydrate = (entry) => {
-          const artwork = artworkIndex.get(String(entry.id || entry.release_id));
+          const artwork = artworkIndex.get(String(entry.release_id || entry.id));
           if (!artwork) return entry;
           return {
             ...entry,
