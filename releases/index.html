@@ -116,7 +116,7 @@
   <script>
     (() => {
       const dataUrl = "/data/discogs-releases.slim.json?v=discogs-artwork-20260531";
-      const artworkApiUrl = "https://api.discogs.com/artists/2192327/releases?per_page=100&page=1&sort=year&sort_order=desc";
+      const artworkUrl = "/data/discogs-artwork.json?v=discogs-artwork-20260531";
       const byId = (id) => document.getElementById(id);
       const escapeHtml = (value) => String(value || "").replace(/[&<>"']/g, (char) => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -249,12 +249,10 @@
         '</span>' + (track.duration ? '<span class="track-duration">' + escapeHtml(track.duration) + '</span>' : '') + '</li>'
       ).join('') + '</ol>' : '';
       const metaRows = (rows) => rows.filter((row) => row[1]).map(([label, value]) => '<div><dt>' + escapeHtml(label) + '</dt><dd>' + escapeHtml(value) + '</dd></div>').join('');
-      const fetchArtworkIndex = () => fetch(artworkApiUrl).then((response) => response.json()).then((payload) => {
+      const fetchArtworkIndex = () => fetch(artworkUrl).then((response) => response.json()).then((payload) => {
         const index = new Map();
-        (payload.releases || []).forEach((item) => {
-          const image = item.cover_image || item.thumb || "";
-          const thumb = item.thumb || item.cover_image || "";
-          if (item.id && (image || thumb)) index.set(String(item.id), { image_url: image, image_thumb: thumb });
+        Object.entries(payload.images || {}).forEach(([id, image]) => {
+          if (image && (image.image_url || image.image_thumb)) index.set(String(id), image);
         });
         return index;
       }).catch(() => new Map());
