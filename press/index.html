@@ -21,25 +21,41 @@
     .press-summary div:last-child { border-right: 0; }
     .press-summary dt { color: var(--muted); font-size: 0.62rem; font-weight: 950; letter-spacing: 0.1em; text-transform: uppercase; }
     .press-summary dd { margin: 0.25rem 0 0; color: var(--accent); font-size: clamp(1.6rem, 3vw, 3rem); font-weight: 950; line-height: 0.85; }
+    .press-media-index { display: grid; grid-template-columns: minmax(10rem, 0.22fr) minmax(0, 1fr); border-bottom: 2px solid var(--line); }
+    .press-media-index-heading { display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; padding: 0.85rem 1rem; background: var(--ink); color: var(--paper); border-right: 2px solid var(--line); font-weight: 950; text-transform: uppercase; }
+    .press-media-index-heading span { font-size: 0.68rem; letter-spacing: 0.12em; color: rgba(255, 255, 255, 0.68); }
+    .press-media-index-heading strong { font-size: clamp(1.55rem, 3vw, 3rem); line-height: 0.82; }
+    .press-media-index-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); }
+    .press-media-chip { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; min-width: 0; padding: 0.62rem 0.8rem; border-right: 1px solid rgba(5, 5, 5, 0.28); border-bottom: 1px solid rgba(5, 5, 5, 0.28); color: var(--ink); }
+    .press-media-chip span { overflow-wrap: anywhere; font-size: 0.68rem; font-weight: 950; letter-spacing: 0.06em; line-height: 1.05; text-transform: uppercase; }
+    .press-media-chip strong { color: var(--accent); font-size: 1.05rem; font-weight: 950; line-height: 0.9; }
     .press-ledger-section { border-bottom: 2px solid var(--line); }
     .press-ledger-section:last-child { border-bottom: 0; }
     .press-ledger-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: 0.8rem 1rem; background: var(--ink); color: var(--paper); border-bottom: 2px solid var(--line); font-weight: 950; letter-spacing: 0.1em; text-transform: uppercase; }
     .press-ledger-heading h3 { margin: 0; font-size: clamp(1rem, 1.7vw, 1.55rem); line-height: 0.95; }
     .press-ledger-heading span { font-size: clamp(1.35rem, 2.8vw, 2.6rem); line-height: 0.85; }
+    .press-media-cluster { display: grid; grid-template-columns: minmax(10rem, 0.25fr) minmax(0, 1fr); border-bottom: 1px solid rgba(5, 5, 5, 0.32); }
+    .press-media-cluster:last-child { border-bottom: 0; }
+    .press-media-heading { display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; min-width: 0; padding: 0.7rem 1rem; border-right: 1px solid rgba(5, 5, 5, 0.32); }
+    .press-media-cluster-lost .press-media-heading { grid-column: 1 / -1; flex-direction: row; align-items: baseline; border-right: 0; }
+    .press-media-heading h4 { margin: 0; overflow-wrap: anywhere; color: var(--ink); font-size: clamp(0.92rem, 1.2vw, 1.1rem); font-weight: 950; letter-spacing: 0.04em; line-height: 1.05; text-transform: uppercase; }
+    .press-media-heading span { color: var(--accent); font-size: 0.66rem; font-weight: 950; letter-spacing: 0.08em; line-height: 1.1; text-transform: uppercase; }
     .press-ledger { margin: 0; padding: 0; list-style: none; }
-    .press-ledger li { display: grid; grid-template-columns: minmax(10rem, 0.34fr) 1rem minmax(0, 1fr); gap: 0.75rem; min-width: 0; padding: 0.7rem 1rem; border-bottom: 1px solid rgba(5, 5, 5, 0.28); }
+    .press-ledger li { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 0.75rem; min-width: 0; padding: 0.58rem 1rem; border-bottom: 1px solid rgba(5, 5, 5, 0.18); }
     .press-ledger li:last-child { border-bottom: 0; }
-    .press-source, .press-dash { color: var(--muted); font-size: 0.68rem; font-weight: 950; letter-spacing: 0.06em; text-transform: uppercase; }
-    .press-ledger a { min-width: 0; color: var(--ink); font-size: clamp(0.92rem, 1.2vw, 1.08rem); font-weight: 850; line-height: 1.15; text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.18em; }
+    .press-entry-country { color: var(--muted); font-size: 0.68rem; font-weight: 950; letter-spacing: 0.06em; line-height: 1.15; text-transform: uppercase; }
+    .press-ledger a, .press-entry-title { min-width: 0; color: var(--ink); font-size: clamp(0.92rem, 1.2vw, 1.08rem); font-weight: 850; line-height: 1.15; }
+    .press-ledger a { text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.18em; }
     .press-ledger a:hover, .press-ledger a:focus-visible { color: var(--accent); outline: 0; }
-    .press-ledger li.press-unlinked { grid-template-columns: minmax(0, 1fr); }
-    .press-ledger li.press-unlinked .press-source { color: var(--ink); font-size: clamp(0.92rem, 1.2vw, 1.08rem); letter-spacing: 0.04em; }
+    .press-ledger li.press-unlinked .press-entry-title { font-weight: 950; letter-spacing: 0.02em; text-transform: uppercase; }
     @media (max-width: 760px) {
       .press-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .press-summary div:nth-child(2n) { border-right: 0; }
       .press-summary div:nth-child(n + 3) { border-top: 2px solid var(--line); }
-      .press-ledger li { grid-template-columns: 1fr; gap: 0.3rem; }
-      .press-dash { display: none; }
+      .press-media-index, .press-media-cluster { grid-template-columns: 1fr; }
+      .press-media-index-heading, .press-media-heading { border-right: 0; border-bottom: 1px solid rgba(5, 5, 5, 0.32); }
+      .press-media-index-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .press-ledger li { grid-template-columns: 3.7rem minmax(0, 1fr); gap: 0.55rem; }
     }
   </style>
 </head>
@@ -75,6 +91,7 @@
           <div><dt>Profiles</dt><dd>--</dd></div>
           <div><dt>Lost Sources</dt><dd>--</dd></div>
         </dl>
+        <div id="press-media-index" aria-label="Repeated media index"></div>
         <div id="press-ledger" aria-label="Linked press ledger"></div>
       </div>
     </section>
@@ -218,15 +235,44 @@
         seen.add(url);
         return true;
       });
-      const renderRow = ([, media, country, title, url]) =>
+      const padCount = (count) => String(count).padStart(2, "0");
+      const sortByMediaWeight = (a, b) => b.rows.length - a.rows.length || a.media.localeCompare(b.media, "en", { sensitivity: "base" });
+      const groupByMedia = (items) => {
+        const mediaMap = new Map();
+        items.forEach((row) => {
+          const media = row[1];
+          if (!mediaMap.has(media)) mediaMap.set(media, []);
+          mediaMap.get(media).push(row);
+        });
+        return Array.from(mediaMap, ([media, mediaRows]) => ({
+          media,
+          rows: mediaRows,
+          countries: Array.from(new Set(mediaRows.map((row) => row[2]).filter(Boolean)))
+        })).sort(sortByMediaWeight);
+      };
+      const renderIndexChip = ({ media, rows }) =>
+        '<div class="press-media-chip"><span>' + escapeHtml(media) + '</span><strong>' + padCount(rows.length) + '</strong></div>';
+      const renderEntry = ([, , country, title, url]) =>
         url
-          ? '<li><span class="press-source">' + escapeHtml(media) + ' (' + escapeHtml(country) + ')</span><span class="press-dash">-</span><a href="' +
+          ? '<li><span class="press-entry-country">' + escapeHtml(country) + '</span><a href="' +
             escapeHtml(url) + '" target="_blank" rel="noopener">' + escapeHtml(title) + '</a></li>'
-          : '<li class="press-unlinked"><span class="press-source">' + escapeHtml(media) + ' (' + escapeHtml(country) + ')</span></li>';
+          : '<li class="press-unlinked"><span class="press-entry-country">' + escapeHtml(country) + '</span><span class="press-entry-title">' + escapeHtml(title) + '</span></li>';
+      const renderCluster = ({ media, rows, countries }) => {
+        const meta = escapeHtml(countries.join(" / ")) + ' / ' + padCount(rows.length);
+        const header = '<header class="press-media-heading"><h4>' + escapeHtml(media) + '</h4><span>' + meta + '</span></header>';
+        if (rows.every((row) => !row[4] && !row[3])) return '<article class="press-media-cluster press-media-cluster-lost">' + header + '</article>';
+        return '<article class="press-media-cluster">' + header + '<ol class="press-ledger">' + rows.map(renderEntry).join('') + '</ol></article>';
+      };
+      const repeatedMedia = groupByMedia(uniqueRows).filter((cluster) => cluster.rows.length > 1);
+      document.getElementById("press-media-index").innerHTML =
+        '<section class="press-media-index"><header class="press-media-index-heading"><span>Media Index</span><strong>' +
+        padCount(repeatedMedia.length) + '</strong></header><div class="press-media-index-list">' +
+        repeatedMedia.map(renderIndexChip).join('') + '</div></section>';
       document.getElementById("press-ledger").innerHTML = groups.map(([key, label]) => {
         const items = uniqueRows.filter((row) => row[0] === key);
+        const clusters = groupByMedia(items);
         return '<section class="press-ledger-section"><header class="press-ledger-heading"><h3>' + escapeHtml(label) +
-          '</h3><span>' + items.length + '</span></header><ol class="press-ledger">' + items.map(renderRow).join('') + '</ol></section>';
+          '</h3><span>' + items.length + '</span></header>' + clusters.map(renderCluster).join('') + '</section>';
       }).join('');
       document.querySelectorAll("#press-summary dd").forEach((node, index) => {
         node.textContent = uniqueRows.filter((row) => row[0] === groups[index][0]).length;
