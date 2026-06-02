@@ -13,38 +13,54 @@
   <title>EMUFUCKA / Releases</title>
   <link rel="shortcut icon" href="/image/avatars-000119125128-2ywodh-t500x500.jpg">
   <link rel="apple-touch-icon" href="/image/avatars-000119125128-2ywodh-t500x500.jpg">
-  <link rel="stylesheet" href="/stylesheets/styles.css?v=discogs-artwork-20260531">
+  <link rel="stylesheet" href="/stylesheets/styles.css?v=archive-entrance-20260602">
   <style>
     .release-summary { grid-template-columns: repeat(5, minmax(0, 1fr)); }
     .release-taxonomy { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 2px solid var(--line); }
     .release-taxonomy-card { min-width: 0; padding: 1rem; border-right: 2px solid var(--line); font-weight: 950; letter-spacing: 0.1em; text-transform: uppercase; }
     .release-taxonomy-card:last-child { border-right: 0; }
-    .release-taxonomy-card header, .release-shelf-heading, .release-subheading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+    .release-taxonomy-card header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 0.75rem; }
+    .release-shelf-heading, .release-subheading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
     .release-taxonomy-card h3, .release-taxonomy-card strong, .release-shelf-heading h3 { margin: 0; line-height: 0.95; }
+    .release-taxonomy-card h3 { overflow-wrap: anywhere; font-size: clamp(0.95rem, 1.5vw, 1.2rem); }
     .release-taxonomy-card header strong, .release-shelf-heading span { color: var(--accent); font-size: clamp(1.6rem, 3vw, 3rem); }
     .release-taxonomy-card ol { display: grid; gap: 0.35rem; margin: 0.85rem 0 0; padding: 0; list-style: none; }
     .release-taxonomy-card li { display: flex; justify-content: space-between; gap: 1rem; padding-top: 0.4rem; border-top: 1px solid rgba(5, 5, 5, 0.2); color: var(--muted); font-size: 0.62rem; }
     .release-taxonomy-card li strong, .release-subheading strong { color: var(--ink); }
-    .release-shelf { border-bottom: 2px solid var(--line); }
+    .release-sections { background: var(--ink); }
+    .release-shelf { border-bottom: 2px solid var(--line); background: var(--paper); }
     .release-shelf-heading { padding: 0.8rem 1rem; border-bottom: 2px solid var(--line); background: var(--ink); color: var(--paper); font-weight: 950; letter-spacing: 0.1em; text-transform: uppercase; }
     .release-shelf-heading h3 { font-size: clamp(1.1rem, 2vw, 1.8rem); }
     .release-shelf-heading span { color: var(--paper); }
-    .release-subheading { padding: 0.7rem 1rem; border-bottom: 2px solid var(--line); color: var(--accent); font-size: 0.66rem; font-weight: 950; letter-spacing: 0.1em; text-transform: uppercase; }
-    .release-card { grid-template-columns: minmax(8rem, 0.34fr) minmax(0, 1fr); gap: 0; padding: 0; }
-    .release-art { display: grid; align-self: start; min-width: 0; aspect-ratio: 1; margin: 0; background: var(--ink); border-right: 2px solid var(--line); color: var(--paper); overflow: hidden; }
+    .release-subheading { padding: 0.7rem 1rem; border-bottom: 2px solid var(--line); background: var(--paper); color: var(--accent); font-size: 0.66rem; font-weight: 950; letter-spacing: 0.1em; text-transform: uppercase; }
+    .release-grid { grid-template-columns: repeat(auto-fill, minmax(13.25rem, 1fr)); gap: 2px; padding: 2px; background: var(--line); }
+    .release-card { grid-template-columns: 1fr; gap: 0; min-height: 100%; padding: 0; border: 0; background: var(--paper); }
+    .release-art { display: grid; place-items: center; align-self: stretch; min-width: 0; aspect-ratio: 1; margin: 0; padding: 0.7rem; background: var(--ink); border: 0; border-bottom: 2px solid var(--line); color: var(--paper); overflow: hidden; }
     .release-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
-    .release-art-placeholder { display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; min-height: 100%; padding: 0.72rem; font-weight: 950; letter-spacing: 0.08em; line-height: 0.9; text-transform: uppercase; }
+    .release-art-placeholder { display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; width: 100%; height: 100%; padding: 0.72rem; border: 1px solid rgba(248, 248, 243, 0.42); font-weight: 950; letter-spacing: 0.08em; line-height: 0.9; text-transform: uppercase; }
     .release-art-placeholder span:first-child { color: var(--accent); font-size: 0.68rem; }
     .release-art-placeholder span:last-child { overflow-wrap: anywhere; font-size: clamp(1.2rem, 2vw, 2rem); }
-    .release-card-body { display: grid; align-content: start; gap: 0.85rem; min-width: 0; padding: 1rem; }
-    .release-discogs-note { color: var(--muted); font-size: 0.58rem; font-weight: 950; letter-spacing: 0.08em; line-height: 1.1; text-transform: uppercase; }
-    .release-card-credit h3 { font-size: clamp(1.25rem, 2.1vw, 2.2rem); }
+    .release-card-body { display: grid; align-content: start; gap: 0.7rem; min-width: 0; padding: 0.85rem; }
+    .release-card h3 { font-size: clamp(1.08rem, 1.8vw, 1.55rem); line-height: 0.95; }
+    .release-card p { font-size: 0.68rem; }
+    .release-card-credit h3 { font-size: clamp(1rem, 1.6vw, 1.42rem); }
+    .release-meta { grid-template-columns: 1fr; }
+    .release-track-details { border-top: 1px solid rgba(5, 5, 5, 0.28); border-bottom: 1px solid rgba(5, 5, 5, 0.28); }
+    .release-track-details summary { cursor: pointer; padding: 0.5rem 0; color: var(--accent); font-size: 0.6rem; font-weight: 950; letter-spacing: 0.1em; text-transform: uppercase; }
+    .release-track-details summary:focus-visible { outline: 2px solid var(--line); outline-offset: 2px; }
+    .release-track-details .track-list { border-top: 1px solid rgba(5, 5, 5, 0.28); }
+    .release-discogs-note { color: var(--muted); font-size: 0.56rem; font-weight: 950; letter-spacing: 0.08em; line-height: 1.1; text-transform: uppercase; }
+    @media (max-width: 900px) {
+      .release-taxonomy { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .release-taxonomy-card:nth-child(2n) { border-right: 0; }
+      .release-taxonomy-card:nth-child(-n + 2) { border-bottom: 2px solid var(--line); }
+    }
     @media (max-width: 620px) {
       .release-summary, .release-taxonomy { grid-template-columns: 1fr; }
       .release-taxonomy-card { border-right: 0; border-bottom: 2px solid var(--line); }
       .release-taxonomy-card:last-child { border-bottom: 0; }
-      .release-card { grid-template-columns: 1fr; }
-      .release-art { border-right: 0; border-bottom: 2px solid var(--line); }
+      .release-grid { grid-template-columns: 1fr; }
+      .release-art { padding: 1rem; }
     }
   </style>
 </head>
@@ -70,6 +86,11 @@
       <div class="section-heading">
         <p class="kicker">Discography</p>
         <h2 id="releases-heading">Release and credit ledger.</h2>
+        <ul class="room-meta" aria-label="Room metadata">
+          <li><span>Room</span><strong>07 / Releases</strong></li>
+          <li><span>Source</span><strong>Discogs API / artwork index</strong></li>
+          <li><span>View</span><strong>Record wall and credit ledger</strong></li>
+        </ul>
       </div>
       <div class="release-board">
         <dl class="release-summary" aria-label="Discogs release summary" id="release-summary">
@@ -242,12 +263,12 @@
           ]
         };
       };
-      const renderTracks = (tracks) => tracks && tracks.length ? '<ol class="track-list">' + tracks.map((track) =>
+      const renderTracks = (tracks) => tracks && tracks.length ? '<details class="release-track-details"><summary>Track ledger</summary><ol class="track-list">' + tracks.map((track) =>
         '<li><span class="track-position">' + escapeHtml(track.position || " ") + '</span><span class="track-body"><strong>' + escapeHtml(track.title) + '</strong>' +
         (track.artist ? '<span class="track-artist">' + escapeHtml(track.artist) + '</span>' : '') +
         ((track.credits || []).length ? '<span class="track-credit">' + escapeHtml(track.credits.join(", ")) + '</span>' : '') +
         '</span>' + (track.duration ? '<span class="track-duration">' + escapeHtml(track.duration) + '</span>' : '') + '</li>'
-      ).join('') + '</ol>' : '';
+      ).join('') + '</ol></details>' : '';
       const mergeCodes = (codes) => {
         const unique = [...new Set(codes.filter(Boolean))];
         const parsed = unique.map((code) => String(code).match(/^(.*?)(\d+)$/));

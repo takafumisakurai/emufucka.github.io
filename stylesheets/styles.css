@@ -92,15 +92,33 @@ a {
 }
 
 .hero {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(18rem, 29rem);
+  grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
-    "labels labels"
-    "type artifact"
-    "facts facts"
-    "actions actions";
-  min-height: auto;
+    "labels"
+    "type"
+    "facts"
+    "actions";
+  min-height: min(760px, calc(100vh - 4.75rem));
+  color: var(--paper);
+  background-image: url("/image/live-documents/rbma-tokyo-2014-blue.jpg");
+  background-position: 50% 44%;
+  background-size: cover;
   border-bottom: 2px solid var(--line);
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 5, 5, 0.58);
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
 }
 
 .catalog-labels {
@@ -114,7 +132,7 @@ a {
 
 .catalog-labels span {
   padding: 0.85rem 1rem;
-  background: var(--paper);
+  background: rgba(5, 5, 5, 0.74);
   border-right: 2px solid var(--line);
 }
 
@@ -128,9 +146,8 @@ a {
   flex-direction: column;
   justify-content: center;
   min-width: 0;
-  padding: clamp(1rem, 4vw, 3rem);
-  background: rgba(248, 248, 243, 0.72);
-  border-right: 2px solid var(--line);
+  max-width: 82rem;
+  padding: clamp(3rem, 9vw, 7.2rem) clamp(1rem, 4vw, 3rem) clamp(2rem, 6vw, 4.5rem);
 }
 
 .kicker {
@@ -148,15 +165,15 @@ p {
 
 h1 {
   margin-bottom: 1rem;
-  font-size: clamp(4rem, 10.6vw, 10.2rem);
+  font-size: clamp(4rem, 14vw, 13.6rem);
   font-weight: 950;
   line-height: 0.74;
 }
 
 .lede {
-  max-width: 44rem;
+  max-width: 48rem;
   margin: 0;
-  color: var(--muted);
+  color: rgba(248, 248, 243, 0.84);
   font-size: clamp(1.05rem, 1.9vw, 1.42rem);
 }
 
@@ -209,8 +226,9 @@ h1 {
 .fact-list div {
   min-width: 0;
   padding: 1rem;
-  background: var(--paper);
+  background: rgba(248, 248, 243, 0.92);
   border-right: 2px solid var(--line);
+  color: var(--ink);
 }
 
 .fact-list div:last-child {
@@ -240,7 +258,7 @@ h1 {
   display: grid;
   min-height: 4.2rem;
   place-items: center;
-  background: var(--bg);
+  background: rgba(5, 5, 5, 0.84);
   border-right: 2px solid var(--line);
   font-size: 0.86rem;
   font-weight: 950;
@@ -252,6 +270,21 @@ h1 {
 
 .action-row a:hover,
 .action-row a:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
+  outline: 0;
+}
+
+.home-page .room-directory {
+  border-top: 2px solid var(--line);
+}
+
+.home-page .room-card {
+  background: rgba(248, 248, 243, 0.9);
+}
+
+.home-page .room-card:hover,
+.home-page .room-card:focus-visible {
   background: var(--ink);
   color: var(--paper);
   outline: 0;
@@ -296,6 +329,44 @@ h1 {
 
 .room-page .section-heading h2 {
   font-size: clamp(2rem, 3.4vw, 3.7rem);
+}
+
+.room-meta {
+  display: grid;
+  gap: 1px;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  background: rgba(5, 5, 5, 0.28);
+  border: 1px solid rgba(5, 5, 5, 0.28);
+  list-style: none;
+}
+
+.room-meta li {
+  display: grid;
+  grid-template-columns: minmax(4.4rem, 0.34fr) minmax(0, 1fr);
+  min-width: 0;
+  background: rgba(248, 248, 243, 0.72);
+}
+
+.room-meta span,
+.room-meta strong {
+  min-width: 0;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.58rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.room-meta span {
+  color: var(--accent);
+  border-right: 1px solid rgba(5, 5, 5, 0.28);
+}
+
+.room-meta strong {
+  overflow-wrap: anywhere;
+  color: var(--ink);
 }
 
 .body-copy {
@@ -1163,7 +1234,6 @@ h1 {
     grid-template-areas:
       "labels"
       "type"
-      "artifact"
       "facts"
       "actions";
   }
@@ -1310,6 +1380,20 @@ h1 {
   }
 }
 
+@media (min-width: 621px) and (max-width: 1020px) {
+  .home-page .catalog-labels {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .home-page .catalog-labels span:nth-child(2n) {
+    border-right: 2px solid var(--line);
+  }
+
+  .home-page .catalog-labels span:last-child {
+    border-right: 0;
+  }
+}
+
 @media (max-width: 620px) {
   body {
     font-size: 15px;
@@ -1439,6 +1523,66 @@ h1 {
 
   h1 {
     font-size: clamp(3rem, 15vw, 3.9rem);
+  }
+
+  .home-page .catalog-labels {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    font-size: 0.52rem;
+  }
+
+  .home-page .hero {
+    min-height: min(720px, calc(100vh - 7.8rem));
+  }
+
+  .home-page .catalog-labels span {
+    padding: 0.5rem 0.4rem;
+    border-right: 2px solid var(--line);
+    border-bottom: 0;
+  }
+
+  .home-page .catalog-labels span:last-child {
+    border-right: 0;
+  }
+
+  .home-page .hero-type {
+    padding: 1.15rem 1rem 1rem;
+  }
+
+  .home-page .kicker {
+    margin-bottom: 0.6rem;
+    font-size: 0.62rem;
+  }
+
+  .home-page (h1 {
+    margin-bottom: 0.6rem;
+    font-size: clamp(3.25rem, 16vw, 4rem);
+  }
+
+  .home-page .lede {
+    max-width: 24rem;
+    font-size: 0.96rem;
+    line-height: 1.28;
+  }
+
+  .home-page .fact-list,
+  .home-page .action-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-page .fact-list div {
+    min-height: 0;
+    padding: 0.55rem 0.65rem;
+  }
+
+  .home-page .action-row a {
+    min-height: 3.15rem;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.72rem;
+  }
+
+  .home-page .fact-list dd {
+    font-size: 0.78rem;
+    line-height: 1.18;
   }
 
   .text-section,
