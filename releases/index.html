@@ -13,7 +13,7 @@
   <title>EMUFUCKA / Discography</title>
   <link rel="shortcut icon" href="/image/avatars-000119125128-2ywodh-t500x500.jpg">
   <link rel="apple-touch-icon" href="/image/avatars-000119125128-2ywodh-t500x500.jpg">
-  <link rel="stylesheet" href="/stylesheets/styles.css?v=artist-profile-20260605">
+  <link rel="stylesheet" href="/stylesheets/styles.css?v=artist-polish-20260605">
   <style>
     .release-summary { grid-template-columns: repeat(5, minmax(0, 1fr)); }
     .release-taxonomy { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 2px solid var(--line); }
@@ -136,8 +136,8 @@
 
   <script>
     (() => {
-      const dataUrl = "/data/discogs-releases.slim.json?v=discogs-artwork-20260531";
-      const artworkUrl = "/data/discogs-artwork.json?v=discogs-artwork-20260531";
+      const dataUrl = "/data/discogs-releases.slim.json?v=discogs-artwork-local-20260605";
+      const artworkUrl = "/data/discogs-artwork.json?v=discogs-artwork-local-20260605";
       const byId = (id) => document.getElementById(id);
       const escapeHtml = (value) => String(value || "").replace(/[&<>"']/g, (char) => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -201,6 +201,7 @@
           label: release.label,
           format: release.format,
           discogs_url: release.discogs_url,
+          local_image_url: release.local_image_url,
           image_url: release.image_url,
           image_thumb: release.image_thumb,
           image_width: release.image_width,
@@ -224,6 +225,7 @@
           label: release.label,
           format: release.format,
           discogs_url: release.discogs_url,
+          local_image_url: release.local_image_url,
           image_url: release.image_url,
           image_thumb: release.image_thumb,
           image_width: release.image_width,
@@ -310,7 +312,7 @@
       const fetchArtworkIndex = () => fetch(artworkUrl).then((response) => response.json()).then((payload) => {
         const index = new Map();
         Object.entries(payload.images || {}).forEach(([id, image]) => {
-          if (image && (image.image_url || image.image_thumb)) index.set(String(id), image);
+          if (image && (image.local_url || image.image_url || image.image_thumb)) index.set(String(id), image);
         });
         return index;
       }).catch(() => new Map());
@@ -320,6 +322,7 @@
           if (!artwork) return entry;
           return {
             ...entry,
+            local_image_url: entry.local_image_url || artwork.local_url,
             image_url: entry.image_url || artwork.image_url,
             image_thumb: entry.image_thumb || artwork.image_thumb
           };
@@ -331,7 +334,7 @@
         };
       };
       const releaseArtwork = (entry, code) => {
-        const source = entry.image_url || entry.image_thumb;
+        const source = entry.local_image_url || entry.image_url || entry.image_thumb;
         if (source) {
           return '<figure class="release-art"><img src="' + escapeHtml(source) + '" alt="' + escapeHtml(entry.title) + ' cover artwork" loading="lazy" decoding="async"></figure>';
         }
