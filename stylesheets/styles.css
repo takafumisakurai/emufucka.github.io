@@ -1531,7 +1531,7 @@ h1 {
   }
 
   .home-page .hero {
-    min-height: min(720px, calc(100vh - 7.8rem));
+    min-height: auto;
   }
 
   .home-page .catalog-labels span {
@@ -1553,9 +1553,9 @@ h1 {
     font-size: 0.62rem;
   }
 
-  .home-page (h1 {
+  .home-page h1 {
     margin-bottom: 0.6rem;
-    font-size: clamp(3.25rem, 16vw, 4rem);
+    font-size: clamp(3.05rem, 15vw, 3.7rem);
   }
 
   .home-page .lede {
