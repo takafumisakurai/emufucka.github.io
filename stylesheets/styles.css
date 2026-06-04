@@ -250,7 +250,7 @@ h1 {
 .action-row {
   grid-area: actions;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border-top: 2px solid var(--line);
 }
 
@@ -378,6 +378,32 @@ h1 {
 
 .body-copy p {
   margin-bottom: 1.2rem;
+}
+
+.profile-summary {
+  margin: 0 0 clamp(1.1rem, 3vw, 1.8rem);
+  padding-bottom: clamp(1rem, 2.6vw, 1.6rem);
+  border-bottom: 2px solid var(--line);
+}
+
+.profile-summary p {
+  margin-bottom: 0.85rem;
+}
+
+.profile-summary p:not(.kicker) {
+  max-width: 52rem;
+  color: var(--ink);
+  font-size: clamp(1.08rem, 2vw, 1.72rem);
+  font-weight: 950;
+  line-height: 1.12;
+}
+
+.profile-summary p:last-child {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: clamp(0.9rem, 1.1vw, 1rem);
+  font-weight: 850;
+  line-height: 1.42;
 }
 
 .room-grid {
@@ -896,6 +922,74 @@ h1 {
 .release-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  background: var(--paper);
+}
+
+.release-shelf {
+  background: var(--paper);
+  border-bottom: 2px solid var(--line);
+}
+
+.release-shelf:last-child {
+  border-bottom: 0;
+}
+
+.release-shelf-heading,
+.release-subheading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+  background: var(--paper);
+  border-bottom: 2px solid var(--line);
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.release-shelf-heading h3 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.release-shelf-heading span,
+.release-subheading strong {
+  color: var(--ink);
+}
+
+.release-art {
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  overflow: hidden;
+  background: rgba(248, 248, 243, 0.8);
+  border: 1px solid rgba(5, 5, 5, 0.12);
+}
+
+.release-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--paper);
+}
+
+.release-art-placeholder {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  gap: 0.35rem;
+  padding: 1rem;
+  border: 2px solid var(--line);
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 950;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .release-card {
@@ -1566,7 +1660,7 @@ h1 {
 
   .home-page .fact-list,
   .home-page .action-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .home-page .fact-list div {
