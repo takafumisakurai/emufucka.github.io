@@ -4,16 +4,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="EMUFUCKA Releases: Discogs API generated release and credit index.">
+  <meta name="description" content="EMUFUCKA Discography: Discogs-powered release wall, albums, singles, appearances, and credits.">
   <meta name="keywords" content="Emufucka, discography, releases, Discogs, future beat, bass, Tokyo, electronic music">
   <!-- Adobe Launch -->
   <script src="//assets.adobedtm.com/launch-EN55cd23628bbd44698a353b23d0bac718.min.js" async></script>
   <!-- End Adobe Launch -->
 
-  <title>EMUFUCKA / Releases</title>
+  <title>EMUFUCKA / Discography</title>
   <link rel="shortcut icon" href="/image/avatars-000119125128-2ywodh-t500x500.jpg">
   <link rel="apple-touch-icon" href="/image/avatars-000119125128-2ywodh-t500x500.jpg">
-  <link rel="stylesheet" href="/stylesheets/styles.css?v=archive-entrance-20260602">
+  <link rel="stylesheet" href="/stylesheets/styles.css?v=artist-profile-20260605">
   <style>
     .release-summary { grid-template-columns: repeat(5, minmax(0, 1fr)); }
     .release-taxonomy { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 2px solid var(--line); }
@@ -67,16 +67,16 @@
 
 <body class="room-page">
   <header class="site-nav" aria-label="Site navigation">
-    <a class="nav-mark" href="/" aria-label="EMUFUCKA home">EMUFUCKA / ARCHIVE</a>
+    <a class="nav-mark" href="/" aria-label="EMUFUCKA home">EMUFUCKA</a>
     <nav class="nav-links" aria-label="Primary">
-      <a href="/provenance/">Provenance</a>
-      <a href="/documents/">Documents</a>
-      <a href="/collection/">Collection</a>
+      <a href="/provenance/">Profile</a>
+      <a href="/documents/">Photos</a>
+      <a href="/collection/">Highlights</a>
       <a href="/press/">Press</a>
       <a href="/video/">Video</a>
       <a href="/audio/">Audio</a>
-      <a href="/releases/" aria-current="page">Releases</a>
-      <a href="/timeline/">Timeline</a>
+      <a href="/releases/" aria-current="page">Discography</a>
+      <a href="/timeline/">Live</a>
     </nav>
   </header>
 
@@ -85,16 +85,16 @@
       <div class="section-number">07</div>
       <div class="section-heading">
         <p class="kicker">Discography</p>
-        <h2 id="releases-heading">Release and credit ledger.</h2>
-        <ul class="room-meta" aria-label="Room metadata">
-          <li><span>Room</span><strong>07 / Releases</strong></li>
+        <h2 id="releases-heading">Releases and credits.</h2>
+        <ul class="room-meta" aria-label="Page metadata">
+          <li><span>Page</span><strong>Discography</strong></li>
           <li><span>Source</span><strong>Discogs API / artwork index</strong></li>
-          <li><span>View</span><strong>Record wall and credit ledger</strong></li>
+          <li><span>View</span><strong>Record wall and credit index</strong></li>
         </ul>
       </div>
       <div class="release-board">
         <dl class="release-summary" aria-label="Discogs release summary" id="release-summary">
-          <div><dt>Releases</dt><dd>--</dd></div>
+          <div><dt>Discography</dt><dd>--</dd></div>
           <div><dt>Appearances</dt><dd>--</dd></div>
           <div><dt>Unofficial</dt><dd>--</dd></div>
           <div><dt>Credits</dt><dd>--</dd></div>
@@ -116,10 +116,10 @@
       </div>
     </section>
 
-    <nav class="room-pagination" aria-label="Room sequence">
+    <nav class="room-pagination" aria-label="Site sequence">
       <a href="/audio/">Previous / Audio</a>
       <a href="/">Index</a>
-      <a href="/timeline/">Next / Timeline</a>
+      <a href="/timeline/">Next / Live</a>
     </nav>
   </main>
 
@@ -263,7 +263,7 @@
           ]
         };
       };
-      const renderTracks = (tracks) => tracks && tracks.length ? '<details class="release-track-details"><summary>Track ledger</summary><ol class="track-list">' + tracks.map((track) =>
+      const renderTracks = (tracks) => tracks && tracks.length ? '<details class="release-track-details"><summary>Track list</summary><ol class="track-list">' + tracks.map((track) =>
         '<li><span class="track-position">' + escapeHtml(track.position || " ") + '</span><span class="track-body"><strong>' + escapeHtml(track.title) + '</strong>' +
         (track.artist ? '<span class="track-artist">' + escapeHtml(track.artist) + '</span>' : '') +
         ((track.credits || []).length ? '<span class="track-credit">' + escapeHtml(track.credits.join(", ")) + '</span>' : '') +
