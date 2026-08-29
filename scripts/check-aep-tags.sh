@@ -4,14 +4,14 @@ set -eu
 tag='//assets.adobedtm.com/launch-EN55cd23628bbd44698a353b23d0bac718.min.js'
 pages='
 index.html
-provenance/index.html
-documents/index.html
-collection/index.html
+profile/index.html
+photos/index.html
+highlights/index.html
 press/index.html
 video/index.html
 audio/index.html
-releases/index.html
-timeline/index.html
+discography/index.html
+live/index.html
 '
 
 for page in $pages; do
@@ -21,4 +21,4 @@ for page in $pages; do
   fi
 done
 
-printf '%s\n' "Adobe Launch/AEP Tags script is present in archive pages."
+printf '%s\n' "Adobe Launch/AEP Tags script is present in site pages."

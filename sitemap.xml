@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.emufucka.com/</loc></url>
-  <url><loc>https://www.emufucka.com/provenance/</loc></url>
-  <url><loc>https://www.emufucka.com/documents/</loc></url>
-  <url><loc>https://www.emufucka.com/collection/</loc></url>
+  <url><loc>https://www.emufucka.com/profile/</loc></url>
+  <url><loc>https://www.emufucka.com/photos/</loc></url>
+  <url><loc>https://www.emufucka.com/highlights/</loc></url>
   <url><loc>https://www.emufucka.com/press/</loc></url>
   <url><loc>https://www.emufucka.com/video/</loc></url>
   <url><loc>https://www.emufucka.com/audio/</loc></url>
-  <url><loc>https://www.emufucka.com/releases/</loc></url>
-  <url><loc>https://www.emufucka.com/timeline/</loc></url>
+  <url><loc>https://www.emufucka.com/discography/</loc></url>
+  <url><loc>https://www.emufucka.com/live/</loc></url>
 </urlset>
