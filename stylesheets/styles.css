@@ -338,6 +338,15 @@ h1 {
   line-height: 0.88;
 }
 
+.page-summary {
+  max-width: 34rem;
+  margin: 0.9rem 0 0;
+  color: rgba(5, 5, 5, 0.68);
+  font-size: clamp(0.9rem, 1.1vw, 1.02rem);
+  font-weight: 750;
+  line-height: 1.45;
+}
+
 .room-meta {
   display: grid;
   gap: 1px;
