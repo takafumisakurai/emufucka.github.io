@@ -331,6 +331,13 @@ h1 {
   font-size: clamp(2rem, 3.4vw, 3.7rem);
 }
 
+.room-page .section-heading h1 {
+  margin-bottom: 0;
+  font-size: clamp(2rem, 3.4vw, 3.7rem);
+  font-weight: 950;
+  line-height: 0.88;
+}
+
 .room-meta {
   display: grid;
   gap: 1px;
@@ -583,6 +590,41 @@ h1 {
   letter-spacing: 0.04em;
   line-height: 1.1;
   text-transform: uppercase;
+}
+
+.document-card figcaption .photo-credit {
+  margin-top: 0.2rem;
+  padding-top: 0.45rem;
+  color: var(--ink);
+  border-top: 1px solid rgba(5, 5, 5, 0.24);
+  font-size: 0.64rem;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+}
+
+.not-found-copy {
+  align-content: center;
+}
+
+.not-found-link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  padding: 0.55rem 0.8rem;
+  border: 2px solid var(--line);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.not-found-link:hover,
+.not-found-link:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .collection-list {

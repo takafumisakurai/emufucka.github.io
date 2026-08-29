@@ -6,21 +6,15 @@ const ARTIST_ID = 2192327;
 const ARTIST_URL = "https://www.discogs.com/ja/artist/2192327-Emufucka";
 const API_ROOT = "https://api.discogs.com";
 const USER_AGENT = process.env.DISCOGS_USER_AGENT || "emufucka-archive/1.0 +https://www.emufucka.com";
-const CSS_VERSION = "discogs-releases-20260530";
-const AEP_TAG = "//assets.adobedtm.com/launch-EN55cd23628bbd44698a353b23d0bac718.min.js";
+const ARCHIVE_PATH = "data/discogs-releases.json";
+const SLIM_ARCHIVE_PATH = "data/discogs-releases.slim.json";
+
+// The release page is maintained independently; this script only refreshes its JSON inputs.
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function cleanName(value = "") {
   return String(value).replace(/\s+\(\d+\)$/u, "").trim();
-}
-
-function escapeHtml(value = "") {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
 }
 
 function compact(value) {
@@ -150,79 +144,6 @@ function releaseSort(a, b) {
   return String(a.title).localeCompare(String(b.title));
 }
 
-function renderTrackRows(tracks) {
-  if (!tracks.length) {
-    return '<p class="release-empty">Discogs track rows unavailable.</p>';
-  }
-
-  return `<ol class="track-list">
-${tracks
-  .map((track) => {
-    const artist = track.artist
-      ? `\n              <span class="track-artist">${escapeHtml(track.artist)}</span>`
-      : "";
-    const credits = track.credits.length
-      ? `\n              <span class="track-credit">${escapeHtml(track.credits.join(", "))}</span>`
-      : "";
-    const duration = track.duration
-      ? `\n            <span class="track-duration">${escapeHtml(track.duration)}</span>`
-      : "";
-    return `          <li>
-            <span class="track-position">${escapeHtml(track.position || " ")}</span>
-            <span class="track-body">
-              <strong>${escapeHtml(track.title)}</strong>${artist}${credits}
-            </span>${duration}
-          </li>`;
-  })
-  .join("\n")}
-        </ol>`;
-}
-
-function renderNav(current = "releases") {
-  const links = [
-    ["provenance", "Provenance", "/provenance/"],
-    ["documents", "Documents", "/documents/"],
-    ["collection", "Collection", "/collection/"],
-    ["press", "Press", "/press/"],
-    ["video", "Video", "/video/"],
-    ["audio", "Audio", "/audio/"],
-    ["releases", "Releases", "/releases/"],
-    ["timeline", "Timeline", "/timeline/"],
-  ];
-
-  return links
-    .map(([key, label, href]) => {
-      const currentAttr = key === current ? ' aria-current="page"' : "";
-      return `      <a href="${href}"${currentAttr}>${label}</a>`;
-    })
-    .join("\n");
-}
-
-function renderFooter() {
-  return `  <footer class="site-footer">
-    <nav class="social-links" aria-label="Social links">
-      <a href="https://soundcloud.com/emufucka" aria-label="Emufucka on SoundCloud" target="_blank" rel="noopener">
-        <span class="social-icon social-icon-soundcloud" aria-hidden="true"></span>
-      </a>
-      <a href="https://open.spotify.com/intl-ja/artist/1bqkaruezjnwOHxd4HUyx1" aria-label="Emufucka on Spotify" target="_blank" rel="noopener">
-        <span class="social-icon social-icon-spotify" aria-hidden="true"></span>
-      </a>
-      <a href="https://music.apple.com/us/artist/emufucka/424908075" aria-label="Emufucka on Apple Music" target="_blank" rel="noopener">
-        <span class="social-icon social-icon-applemusic" aria-hidden="true"></span>
-      </a>
-      <a href="https://www.facebook.com/emuf.cka" aria-label="Emufucka on Facebook" target="_blank" rel="noopener">
-        <span class="social-icon social-icon-facebook" aria-hidden="true"></span>
-      </a>
-      <a href="https://x.com/emufucka" aria-label="Emufucka on X" target="_blank" rel="noopener">
-        <span class="social-icon social-icon-x" aria-hidden="true"></span>
-      </a>
-      <a href="${ARTIST_URL}" aria-label="Emufucka on Discogs" target="_blank" rel="noopener">
-        <span class="social-icon social-icon-discogs" aria-hidden="true"></span>
-      </a>
-    </nav>
-  </footer>`;
-}
-
 function buildSlimArchive(archive) {
   const primaryCount = archive.releases.filter((release) => release.roles.includes("Main")).length;
   const years = uniq(archive.releases.map((release) => release.year)).sort((a, b) => Number(b) - Number(a));
@@ -239,9 +160,11 @@ function buildSlimArchive(archive) {
     year_range: yearRange,
     releases: archive.releases.map((release, index) => {
       const tracks =
-        release.roles.includes("Main") || release.roles.includes("UnofficialRelease")
-          ? release.all_tracks
-          : release.featured_tracks;
+        Array.isArray(release.tracks)
+          ? release.tracks
+          : release.roles.includes("Main") || release.roles.includes("UnofficialRelease")
+            ? release.all_tracks
+            : release.featured_tracks;
 
       return {
         code: `REL-${String(index + 1).padStart(2, "0")}`,
@@ -261,133 +184,26 @@ function buildSlimArchive(archive) {
   };
 }
 
-function renderReleasesPage(archive) {
-  const primaryCount = archive.releases.filter((release) => release.roles.includes("Main")).length;
-  const years = uniq(archive.releases.map((release) => release.year)).sort((a, b) => Number(b) - Number(a));
-  const yearRange = `${years.at(-1)}-${years[0]}`;
-
-  return `<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="EMUFUCKA Releases: Discogs API generated release and track index.">
-  <meta name="keywords" content="Emufucka, discography, releases, tracks, Discogs, future beat, bass, Tokyo, electronic music">
-  <!-- Adobe Launch -->
-  <script src="${AEP_TAG}" async></script>
-  <!-- End Adobe Launch -->
-
-  <title>EMUFUCKA / Releases</title>
-  <link rel="shortcut icon" href="/image/avatars-000119125128-2ywodh-t500x500.jpg">
-  <link rel="apple-touch-icon" href="/image/avatars-000119125128-2ywodh-t500x500.jpg">
-  <link rel="stylesheet" href="/stylesheets/styles.css?v=${CSS_VERSION}">
-</head>
-
-<body class="room-page">
-  <header class="site-nav" aria-label="Site navigation">
-    <a class="nav-mark" href="/" aria-label="EMUFUCKA home">EMUFUCKA / ARCHIVE</a>
-    <nav class="nav-links" aria-label="Primary">
-${renderNav("releases")}
-    </nav>
-  </header>
-
-  <main>
-    <section class="releases-section" id="releases" aria-labelledby="releases-heading">
-      <div class="section-number">07</div>
-      <div class="section-heading">
-        <p class="kicker">Discography</p>
-        <h2 id="releases-heading">Release and track ledger.</h2>
-      </div>
-      <div class="release-board">
-        <dl class="release-summary" aria-label="Discogs release summary">
-          <div>
-            <dt>Discogs entries</dt>
-            <dd>${archive.releases.length}</dd>
-          </div>
-          <div>
-            <dt>Main releases</dt>
-            <dd>${primaryCount}</dd>
-          </div>
-          <div>
-            <dt>Track rows</dt>
-            <dd>${archive.track_count}</dd>
-          </div>
-          <div>
-            <dt>Years</dt>
-            <dd>${escapeHtml(yearRange)}</dd>
-          </div>
-        </dl>
-
-        <div class="release-source-panel">
-          <span>Source / Discogs API</span>
-          <a href="${ARTIST_URL}" target="_blank" rel="noopener">Artist Page</a>
-          <time datetime="${escapeHtml(archive.generated_at)}">${escapeHtml(archive.generated_label)}</time>
-        </div>
-
-        <div class="release-grid" aria-label="Discogs release and track index">
-${archive.releases
-  .map((release, index) => {
-    const number = String(index + 1).padStart(2, "0");
-    const tracks =
-      release.roles.includes("Main") || release.roles.includes("UnofficialRelease")
-        ? release.all_tracks
-        : release.featured_tracks;
-    const roleTags = release.roles
-      .map((role) => `<span>${escapeHtml(role)}</span>`)
-      .join("");
-    const meta = [
-      ["Released", release.released || release.year],
-      ["Label", release.label],
-      ["Format", release.format],
-      ["Discogs", `${release.type.toUpperCase()} / ${release.id}`],
-    ].filter(([, value]) => value);
-
-    return `          <article class="release-card">
-            <header>
-              <div class="release-code">
-                <span>REL-${number}</span>
-                <span>${escapeHtml(String(release.year || "----"))}</span>
-              </div>
-              <h3>${escapeHtml(release.title)}</h3>
-              <p>${escapeHtml(release.artist)}</p>
-            </header>
-            <div class="role-list" aria-label="Discogs roles">${roleTags}</div>
-            <dl class="release-meta">
-${meta
-  .map(([label, value]) => `              <div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`)
-  .join("\n")}
-            </dl>
-            ${renderTrackRows(tracks)}
-            <a class="release-link" href="${escapeHtml(release.discogs_url)}" target="_blank" rel="noopener">Open on Discogs</a>
-          </article>`;
-  })
-  .join("\n")}
-        </div>
-      </div>
-    </section>
-
-    <nav class="room-pagination" aria-label="Room sequence">
-      <a href="/audio/">Previous / Audio</a>
-      <a href="/">Index</a>
-      <a href="/timeline/">Next / Timeline</a>
-    </nav>
-  </main>
-
-${renderFooter()}
-</body>
-
-</html>
-`;
+async function writeJsonOutputs(archive, { includeFullArchive = false } = {}) {
+  await mkdir("data", { recursive: true });
+  if (includeFullArchive) {
+    await writeFile(ARCHIVE_PATH, `${JSON.stringify(archive, null, 2)}\n`);
+  }
+  await writeFile(SLIM_ARCHIVE_PATH, `${JSON.stringify(buildSlimArchive(archive))}\n`);
 }
 
 async function main() {
   if (process.argv.includes("--render-only")) {
-    const archive = JSON.parse(await readFile("data/discogs-releases.json", "utf8"));
-    await mkdir("data", { recursive: true });
-    await mkdir("releases", { recursive: true });
-    await writeFile("data/discogs-releases.slim.json", `${JSON.stringify(buildSlimArchive(archive))}\n`);
-    await writeFile("releases/index.html", renderReleasesPage(archive));
+    let archive;
+    try {
+      archive = JSON.parse(await readFile(ARCHIVE_PATH, "utf8"));
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+      // Fresh clones do not contain the ignored full archive. Re-normalize the
+      // tracked slim archive instead, while leaving the release page untouched.
+      archive = JSON.parse(await readFile(SLIM_ARCHIVE_PATH, "utf8"));
+    }
+    await writeJsonOutputs(archive);
     return;
   }
 
@@ -438,11 +254,7 @@ async function main() {
     tracks,
   };
 
-  await mkdir("data", { recursive: true });
-  await mkdir("releases", { recursive: true });
-  await writeFile("data/discogs-releases.json", `${JSON.stringify(archive, null, 2)}\n`);
-  await writeFile("data/discogs-releases.slim.json", `${JSON.stringify(buildSlimArchive(archive))}\n`);
-  await writeFile("releases/index.html", renderReleasesPage(archive));
+  await writeJsonOutputs(archive, { includeFullArchive: true });
 }
 
 main().catch((error) => {
