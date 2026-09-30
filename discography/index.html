@@ -183,6 +183,7 @@
         return day + " " + months[month - 1] + " " + match[1];
       };
       const displayCredit = (value) => String(value || "").replace(/^Emufucka\b/i, "EMUFUCKA");
+      const releaseKey = (entry) => [entry.type, entry.release_id || entry.id].join(":");
       const hasFormat = (release, pattern) => pattern.test(String(release.format || "").toLowerCase());
       const countBy = (items, key) => items.reduce((counts, item) => {
         const label = key(item);
@@ -253,7 +254,8 @@
         const producerRows = trackCredits.filter((entry) => entry.role === "Producer").map((entry, index) => ({
           ...entry, code: "CR-P" + String(index + 1).padStart(2, "0"), group_label: "Production", section: "Producer"
         }));
-        const standaloneProducerRows = releases.filter((release) => hasRole(release, "Producer") && !hasRole(release, "TrackAppearance")).map((release, index) => ({
+        const releasesWithProducerTracks = new Set(producerRows.map(releaseKey));
+        const standaloneProducerRows = releases.filter((release) => hasRole(release, "Producer") && !releasesWithProducerTracks.has(releaseKey(release))).map((release, index) => ({
           id: [release.type, release.id, "producer-release"].join("-"),
           code: "CR-P" + String(producerRows.length + index + 1).padStart(2, "0"),
           release_id: release.id,
@@ -333,7 +335,7 @@
       const mergeCreditEntries = (entries) => {
         const byRelease = new Map();
         entries.forEach((entry) => {
-          const key = [entry.group_label, entry.section, entry.release_id || entry.id, entry.credit].join("|");
+          const key = [entry.group_label, entry.section, releaseKey(entry), displayCredit(entry.credit).trim().toLowerCase()].join("|");
           if (!byRelease.has(key)) {
             byRelease.set(key, { ...entry, codes: [], credit_count: 0, tracks: [] });
           }
